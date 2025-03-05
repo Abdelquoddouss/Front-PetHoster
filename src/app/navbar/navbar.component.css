@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Masquer la checkbox */
+#menu-toggle {
+  display: none;
+}
+
+/* Afficher le menu mobile lorsque la checkbox est cochée */
 #menu-toggle:checked ~ #mobile-menu {
   display: block;
 }

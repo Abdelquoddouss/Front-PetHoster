@@ -1,28 +1,32 @@
 <nav class="bg-white shadow-md fixed top-0 left-0 w-full z-50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between items-center max-h-20"> <!-- Ajustez la hauteur ici (h-32 = 128px) -->
-      <!-- Logo et liens principaux -->
+    <div class="flex justify-between items-center h-20">
+      <!-- Logo -->
       <div class="flex items-center">
-        <!-- Logo -->
-        <a href="#" class="text-xl font-bold text-gray-800">
-          <img src="../../assets/img/Orange_Simple_Pet_Shop_Logo-removebg-preview.png" alt="Logo" class="h-52"> <!-- Taille du logo ajustée -->
+        <a href="index.html" class="text-xl font-bold flex items-center space-x-2 group">
+          <span class="text-3xl transition-transform duration-300 group-hover:rotate-12">🐾</span>
+          <span class="bg-gradient-to-r from-green-300 to-blue-300 bg-clip-text text-transparent transition-all duration-300 group-hover:from-green-400 group-hover:to-blue-400 drop-shadow-lg">Pet Sitting</span>
         </a>
-        <div class="hidden md:flex md:space-x-8 md:ml-10">
-          <a href="#" class="text-gray-500 hover:text-gray-700">Home</a>
-          <a href="#" class="text-gray-500 hover:text-gray-700">About Us</a>
-          <a href="#" class="text-gray-500 hover:text-gray-700">Services</a>
-          <a href="#" class="text-gray-500 hover:text-gray-700">Pricing</a>
-          <a href="#" class="text-gray-500 hover:text-gray-700">Contact</a>
-        </div>
       </div>
-      <!-- Boutons de connexion et inscription -->
+
+      <!-- Liens de navigation (Desktop) -->
+      <div class="hidden md:flex md:space-x-8 md:ml-10">
+        <a href="#" class="text-gray-500 hover:text-green-400 transition-colors duration-300">Home</a>
+        <a href="#" class="text-gray-500 hover:text-green-400 transition-colors duration-300">About Us</a>
+        <a href="#" class="text-gray-500 hover:text-green-400 transition-colors duration-300">Services</a>
+        <a href="#" class="text-gray-500 hover:text-green-400 transition-colors duration-300">Pricing</a>
+        <a href="#" class="text-gray-500 hover:text-green-400 transition-colors duration-300">Contact</a>
+      </div>
+
+      <!-- Boutons de connexion et inscription (Desktop) -->
       <div class="hidden md:flex md:items-center md:space-x-4">
-        <a href="#" class="text-gray-500 hover:text-gray-700">Sign in</a>
-        <a href="#" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Sign up</a>
+        <a href="#" class="text-gray-500 hover:text-green-400 transition-colors duration-300">Sign in</a>
+        <a href="#" class="bg-gradient-to-r from-green-300 to-blue-300 text-white px-4 py-2 rounded-md hover:from-green-400 hover:to-blue-400 transition-all duration-300">Sign up</a>
       </div>
-      <!-- Bouton du menu burger pour mobile -->
+
+      <!-- Bouton du menu burger (Mobile) -->
       <div class="flex items-center md:hidden">
-        <label for="menu-toggle" class="cursor-pointer text-gray-500 hover:text-gray-700">
+        <label for="menu-toggle" class="text-gray-500 hover:text-green-400 cursor-pointer">
           <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
           </svg>
@@ -30,17 +34,18 @@
       </div>
     </div>
   </div>
+
   <!-- Menu mobile -->
   <input type="checkbox" id="menu-toggle" class="hidden">
   <div id="mobile-menu" class="md:hidden hidden bg-white border-t border-gray-200">
     <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-      <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900">Home</a>
-      <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900">About Us</a>
-      <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900">Services</a>
-      <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900">Pricing</a>
-      <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900">Contact</a>
-      <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900">Sign in</a>
-      <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-white bg-blue-500 hover:bg-blue-600">Sign up</a>
+      <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-green-50 hover:text-green-500 transition-colors duration-300">Home</a>
+      <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-green-50 hover:text-green-500 transition-colors duration-300">About Us</a>
+      <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-green-50 hover:text-green-500 transition-colors duration-300">Services</a>
+      <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-green-50 hover:text-green-500 transition-colors duration-300">Pricing</a>
+      <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-green-50 hover:text-green-500 transition-colors duration-300">Contact</a>
+      <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-green-50 hover:text-green-500 transition-colors duration-300">Sign in</a>
+      <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-white bg-gradient-to-r from-green-300 to-blue-300 hover:from-green-400 hover:to-blue-400 transition-all duration-300">Sign up</a>
     </div>
   </div>
 </nav>
