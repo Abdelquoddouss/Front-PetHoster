@@ -1,0 +1,83 @@
+<div class="relative w-full h-screen bg-cover bg-center" style="background-image: url('assets/img/image_6.jpg');">
+  <!-- Overlay sombre pour améliorer la lisibilité du texte -->
+  <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+
+  <!-- Contenu principal centré -->
+  <div class="relative z-10 flex flex-col items-center justify-center h-full text-center text-white px-6">
+    <!-- Titre principal -->
+    <h1 class="text-5xl font-bold mb-4 animate-fade-in-up">
+      Every Home is a Destination
+    </h1>
+    <!-- Sous-titre -->
+    <p class="mt-4 text-lg max-w-2xl animate-fade-in-up delay-100">
+      The best of Luxury Retreats is now Flowbite Luxe—offering the world's most extraordinary homes with the highest standard of service.
+    </p>
+    <!-- Bouton d'action -->
+    <button class="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 animate-fade-in-up delay-200">
+      Sign In / Register
+    </button>
+
+    <!-- Barre de recherche -->
+    <div class="mt-8 w-full max-w-4xl bg-white rounded-lg shadow-lg p-4 flex flex-wrap gap-4 md:flex-nowrap animate-fade-in-up delay-300">
+      <!-- Champ de recherche -->
+      <input
+        type="text"
+        placeholder="Search destinations"
+        class="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+      />
+      <!-- Date d'arrivée -->
+      <input
+        type="date"
+        placeholder="Check in"
+        class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+      />
+      <!-- Date de départ -->
+      <input
+        type="date"
+        placeholder="Check out"
+        class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+      />
+      <!-- Sélection du nombre de voyageurs -->
+      <select
+        class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+      >
+        <option>Add guests</option>
+        <option>1 Guest</option>
+        <option>2 Guests</option>
+        <option>3+ Guests</option>
+      </select>
+      <!-- Bouton de recherche -->
+      <button
+        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg flex items-center justify-center transition-all duration-300 transform hover:scale-105"
+      >
+        🔍 Search
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Styles pour les animations -->
+<style>
+  @keyframes fade-in-up {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .animate-fade-in-up {
+    animation: fade-in-up 0.5s ease-out forwards;
+  }
+  .delay-100 {
+    animation-delay: 0.1s;
+  }
+  .delay-200 {
+    animation-delay: 0.2s;
+  }
+  .delay-300 {
+    animation-delay: 0.3s;
+  }
+</style>

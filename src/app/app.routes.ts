@@ -5,6 +5,8 @@ import {NavbarComponent} from "./navbar/navbar.component";
 import {FooterComponent} from "./footer/footer.component";
 import {LayoutComponent} from "./layout/layout.component";
 import {HomeComponent} from "./home/home.component";
+import {HerosComponent} from "./heros/heros.component";
+import {HebergementComponent} from "./hebergement/hebergement.component";
 
 export const routes: Routes = [
 
@@ -16,6 +18,7 @@ export const routes: Routes = [
 
   { path: 'login', component: LoginComponent },
 
+  { path: 'heros', component: HerosComponent },
 
 
   { path: '',
@@ -23,6 +26,9 @@ export const routes: Routes = [
 
   children: [
     { path: 'home', component: HomeComponent },
+    { path: 'heb', component: HebergementComponent },
+
+
 
   ]}
 
