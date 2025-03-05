@@ -9,6 +9,7 @@ import {HerosComponent} from "./heros/heros.component";
 import {HebergementComponent} from "./hebergement/hebergement.component";
 import {SidebarComponent} from "./dashboard-hebergeur/sidebar/sidebar.component";
 import {CrudUserComponent} from "./Crud/crud-user/crud-user.component";
+import {CrudTypeAnimalComponent} from "./crud-type-animal/crud-type-animal.component";
 
 export const routes: Routes = [
 
@@ -36,6 +37,8 @@ export const routes: Routes = [
     component: SidebarComponent,
     children: [
       { path: 'crud-user', component: CrudUserComponent },
+      { path: 'crud-typeanimal', component: CrudTypeAnimalComponent },
+
     ]
   },
 
