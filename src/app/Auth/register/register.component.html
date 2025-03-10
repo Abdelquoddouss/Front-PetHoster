@@ -1,4 +1,4 @@
-<section class="min-h-screen flex items-center justify-center px-6 py-12 relative overflow-hidden">
+<section class="min-h-screen flex items-center justify-center">
   <!-- Image de fond optimisée -->
   <picture>
     <source srcset="assets/img/istockphoto-1417882544-612x612.jpg" type="image/webp">
@@ -14,53 +14,84 @@
     <h2 class="text-3xl font-bold text-gray-800 text-center mb-4">Inscription</h2>
     <p class="text-gray-600 text-center mb-8">Rejoignez-nous en quelques étapes simples.</p>
 
-    <form >
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
       <!-- Nom -->
       <div class="mb-6">
         <label for="nom" class="block text-gray-700 font-medium mb-2">Nom</label>
-        <input type="text" id="nom" name="nom" required minlength="2" maxlength="50"
+        <input type="text" id="nom" formControlName="nom" required minlength="2" maxlength="50"
                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition placeholder-gray-400"
                placeholder="Entrez votre nom">
+        <!-- Messages de validation pour le nom -->
+        <div *ngIf="registerForm.get('nom')?.invalid && registerForm.get('nom')?.touched" class="text-red-500 text-sm mt-1">
+          <div *ngIf="registerForm.get('nom')?.errors?.['required']">Le nom est obligatoire.</div>
+          <div *ngIf="registerForm.get('nom')?.errors?.['minlength']">Le nom doit contenir au moins 2 caractères.</div>
+          <div *ngIf="registerForm.get('nom')?.errors?.['maxlength']">Le nom ne peut pas dépasser 50 caractères.</div>
+        </div>
       </div>
 
       <!-- Prénom -->
       <div class="mb-6">
         <label for="prenom" class="block text-gray-700 font-medium mb-2">Prénom</label>
-        <input type="text" id="prenom" name="prenom" required minlength="2" maxlength="50"
+        <input type="text" id="prenom" formControlName="prenom" required minlength="2" maxlength="50"
                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition placeholder-gray-400"
                placeholder="Entrez votre prénom">
+        <!-- Messages de validation pour le prénom -->
+        <div *ngIf="registerForm.get('prenom')?.invalid && registerForm.get('prenom')?.touched" class="text-red-500 text-sm mt-1">
+          <div *ngIf="registerForm.get('prenom')?.errors?.['required']">Le prénom est obligatoire.</div>
+          <div *ngIf="registerForm.get('prenom')?.errors?.['minlength']">Le prénom doit contenir au moins 2 caractères.</div>
+          <div *ngIf="registerForm.get('prenom')?.errors?.['maxlength']">Le prénom ne peut pas dépasser 50 caractères.</div>
+        </div>
       </div>
 
       <!-- Email -->
       <div class="mb-6">
         <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
-        <input type="email" id="email" name="email" required
+        <input type="email" id="email" formControlName="email" required
                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition placeholder-gray-400"
                placeholder="exemple@mail.com">
+        <!-- Messages de validation pour l'email -->
+        <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="text-red-500 text-sm mt-1">
+          <div *ngIf="registerForm.get('email')?.errors?.['required']">L'email est obligatoire.</div>
+          <div *ngIf="registerForm.get('email')?.errors?.['email']">Veuillez entrer un email valide.</div>
+        </div>
       </div>
 
       <!-- Mot de passe -->
       <div class="mb-6">
         <label for="motDePasse" class="block text-gray-700 font-medium mb-2">Mot de passe</label>
-        <input type="password" id="motDePasse" name="motDePasse" required minlength="8"
+        <input type="password" id="motDePasse" formControlName="motDePasse" required minlength="8"
                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition placeholder-gray-400"
                placeholder="••••••••">
+        <!-- Messages de validation pour le mot de passe -->
+        <div *ngIf="registerForm.get('motDePasse')?.invalid && registerForm.get('motDePasse')?.touched" class="text-red-500 text-sm mt-1">
+          <div *ngIf="registerForm.get('motDePasse')?.errors?.['required']">Le mot de passe est obligatoire.</div>
+          <div *ngIf="registerForm.get('motDePasse')?.errors?.['minlength']">Le mot de passe doit contenir au moins 8 caractères.</div>
+        </div>
       </div>
 
       <!-- Téléphone -->
       <div class="mb-6">
         <label for="telephone" class="block text-gray-700 font-medium mb-2">Téléphone</label>
-        <input type="text" id="telephone" name="telephone" required pattern="[0-9]{10}"
+        <input type="text" id="telephone" formControlName="telephone" required pattern="[0-9]{10}"
                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition placeholder-gray-400"
                placeholder="0123456789">
+        <!-- Messages de validation pour le téléphone -->
+        <div *ngIf="registerForm.get('telephone')?.invalid && registerForm.get('telephone')?.touched" class="text-red-500 text-sm mt-1">
+          <div *ngIf="registerForm.get('telephone')?.errors?.['required']">Le téléphone est obligatoire.</div>
+          <div *ngIf="registerForm.get('telephone')?.errors?.['pattern']">Le téléphone doit contenir exactement 10 chiffres.</div>
+        </div>
       </div>
 
       <!-- Adresse -->
       <div class="mb-6">
         <label for="adresse" class="block text-gray-700 font-medium mb-2">Adresse</label>
-        <input type="text" id="adresse" name="adresse" required
+        <input type="text" id="adresse" formControlName="adresse" required
                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition placeholder-gray-400"
                placeholder="Entrez votre adresse">
+        <!-- Messages de validation pour l'adresse -->
+        <div *ngIf="registerForm.get('adresse')?.invalid && registerForm.get('adresse')?.touched" class="text-red-500 text-sm mt-1">
+          <div *ngIf="registerForm.get('adresse')?.errors?.['required']">L'adresse est obligatoire.</div>
+        </div>
       </div>
 
       <!-- Bouton d'inscription -->
