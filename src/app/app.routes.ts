@@ -9,9 +9,10 @@ import {HerosComponent} from "./heros/heros.component";
 import {HebergementComponent} from "./hebergement/hebergement.component";
 import {SidebarComponent} from "./dashboard-hebergeur/sidebar/sidebar.component";
 import {CrudUserComponent} from "./Crud/crud-user/crud-user.component";
-import {CrudTypeAnimalComponent} from "./crud-type-animal/crud-type-animal.component";
-import {CrudAnimalComponent} from "./crud-animal/crud-animal.component";
-import {CrudHebergementComponent} from "./crud-hebergement/crud-hebergement.component";
+import {CrudTypeAnimalComponent} from "./Crud/crud-type-animal/crud-type-animal.component";
+import {CrudAnimalComponent} from "./Crud/crud-animal/crud-animal.component";
+import {CrudHebergementComponent} from "./Crud/crud-hebergement/crud-hebergement.component";
+import {FormHebergementComponent} from "./form-hebergement/form-hebergement.component";
 
 export const routes: Routes = [
 
@@ -43,6 +44,7 @@ export const routes: Routes = [
       { path: 'crud-typeanimal', component: CrudTypeAnimalComponent },
       { path: 'crud-animal', component: CrudAnimalComponent },
       { path: 'crud-herbergement', component: CrudHebergementComponent },
+      { path: 'form-herbergement', component: FormHebergementComponent },
 
 
 
