@@ -1,6 +1,35 @@
 <app-heros></app-heros>
+  <!-- Bouton "Devenir hébergeur" en haut -->
+<div class="m-1">
+  <ng-container *ngIf="userRole === 'HEBERGEUR'; else devenirHebergeurButton">
+    <!-- Bouton Dashboard si l'utilisateur est déjà hébergeur -->
+    <button
+      class="block w-full select-none rounded-lg bg-blue-500 py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+      type="button"
+      data-ripple-light="true"
+      routerLink="/dashboard-hebergeur"
+    >
+      Dashboard
+    </button>
+  </ng-container>
+
+  <ng-template #devenirHebergeurButton>
+    <!-- Bouton Devenir hébergeur si l'utilisateur n'est pas encore hébergeur -->
+    <button
+      class="block w-full select-none rounded-lg bg-green-500 py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+      type="button"
+      data-ripple-light="true"
+      (click)="devenirHebergeur()"
+    >
+      Devenir hébergeur
+    </button>
+  </ng-template>
+</div>
+
 <div class="relative flex w-96 flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-lg">
-  <div class="relative mx-4 mt-4 overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
+
+  <!-- Image de la carte -->
+  <div class="relative mx-4 overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
     <img
       src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80"
       alt="ui/ux review check"
@@ -178,18 +207,6 @@
       data-ripple-light="true"
     >
       Reserve
-    </button>
-  </div>
-
-  <!-- Bouton "Devenir hébergeur" -->
-  <div class="p-6 pt-3">
-    <button
-      class="block w-full select-none rounded-lg bg-green-500 py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-      type="button"
-      data-ripple-light="true"
-      (click)="devenirHebergeur()"
-    >
-      Devenir hébergeur
     </button>
   </div>
 </div>

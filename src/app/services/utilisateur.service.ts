@@ -39,4 +39,9 @@ export class UtilisateurService {
       })
     );
   }
+
+  getUserRole(userId: string): Observable<string> {
+    const headers = this.getHeaders();
+    return this.http.get(`${this.apiUrl}/${userId}/role`, { headers, responseType: 'text' });
+  }
 }

@@ -19,11 +19,9 @@ export class AuthService {
   login(loginData: { email: string, password: string }): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/login`, loginData).pipe(
       tap(response => {
-        // Stocker le token dans le localStorage
         if (response.token) {
           localStorage.setItem('authToken', response.token);
 
-          // Décoder le token pour extraire l'ID de l'utilisateur
           const decodedToken: any = jwtDecode(response.token);
           const userId = decodedToken.id;
 
