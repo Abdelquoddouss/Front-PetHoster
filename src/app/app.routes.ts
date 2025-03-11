@@ -31,8 +31,9 @@ export const routes: Routes = [
   { path: 'dashboard-admin',
     component: DashboardAdminComponent,
   children:[
-    { path: 'crud-animal', component: CrudAnimalComponent },
     { path: 'crud-user', component: CrudUserComponent },
+    { path: 'crud-animal', component: CrudAnimalComponent },
+
 
   ]
 

@@ -39,7 +39,7 @@ export class LoginComponent {
           const userRole = decodedToken.role;
 
           if (userRole === 'ADMIN') {
-            this.router.navigate(['/admin-dashboard']);
+            this.router.navigate(['/dashboard-admin']);
           } else if (userRole === 'HEBERGEUR') {
             this.router.navigate(['/dashboard-hebergeur']);
           } else if (userRole === 'PROPRIETAIRE') {
