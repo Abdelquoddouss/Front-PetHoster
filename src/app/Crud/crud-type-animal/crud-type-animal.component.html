@@ -1,20 +1,73 @@
 <div class="p-4">
-  <h2 class="text-lg font-semibold">Gestion des Type Animal</h2>
-  <button class="bg-blue-500 text-white px-4 py-2 rounded-md mt-4" >Ajouter un Type Animal</button>
-  <table class="min-w-full mt-4">
-    <thead>
-    <tr>
-      <th class="px-4 py-2">animalType</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-      <td class="border px-4 py-2"></td>
-      <td class="border px-4 py-2">
-        <button class="bg-yellow-500 text-white px-2 py-1 rounded-md" >Modifier</button>
-        <button class="bg-red-500 text-white px-2 py-1 rounded-md ml-2" >Supprimer</button>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+  <h2 class="text-2xl font-bold mb-4 text-gray-800">Gestion des Types d'Animaux</h2>
+
+  <!-- Bouton pour ouvrir la modal -->
+  <button
+    class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
+    (click)="openModal()"
+  >
+    Ajouter un Type d'Animal
+  </button>
+
+  <!-- Tableau des types d'animaux -->
+  <div class="overflow-x-auto rounded-lg shadow mt-4">
+    <table class="min-w-full bg-white">
+      <thead class="bg-gray-50">
+      <tr>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type d'Animal</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+      </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+      <tr *ngFor="let typeAnimal of typeAnimals" class="hover:bg-gray-50 transition-colors">
+        <td class="px-6 py-4 whitespace-nowrap">{{ typeAnimal.animalType }}</td>
+        <td class="px-6 py-4 whitespace-nowrap">
+          <button
+            class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition-colors"
+            (click)="deleteTypeAnimal(typeAnimal.id)"
+          >
+            Supprimer
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal pour ajouter un type d'animal -->
+  <div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md">
+      <div class="p-6">
+        <h3 class="text-xl font-bold mb-4">Ajouter un Type d'Animal</h3>
+        <form (ngSubmit)="onSubmit()">
+          <div class="mb-4">
+            <label for="animalType" class="block text-sm font-medium text-gray-700">Type d'Animal</label>
+            <input
+              type="text"
+              id="animalType"
+              [(ngModel)]="newTypeAnimal.animalType"
+              name="animalType"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              required
+            />
+          </div>
+          <div class="flex justify-end">
+            <button
+              type="button"
+              class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition-colors mr-2"
+              (click)="closeModal()"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
+            >
+              Ajouter
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>

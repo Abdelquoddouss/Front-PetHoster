@@ -27,12 +27,13 @@ export const routes: Routes = [
 
   { path: 'heros', component: HerosComponent },
 
+  { path: 'crud-animal', component: CrudAnimalComponent },
 
   { path: 'dashboard-admin',
     component: DashboardAdminComponent,
   children:[
     { path: 'crud-user', component: CrudUserComponent },
-    { path: 'crud-animal', component: CrudAnimalComponent },
+    { path: 'crud-typeanimal', component: CrudTypeAnimalComponent },
 
 
   ]
@@ -52,7 +53,6 @@ export const routes: Routes = [
     path: 'dashboard-hebergeur',
     component: SidebarComponent,
     children: [
-      { path: 'crud-typeanimal', component: CrudTypeAnimalComponent },
       { path: 'crud-herbergement', component: CrudHebergementComponent },
       { path: 'form-herbergement', component: FormHebergementComponent },
 
