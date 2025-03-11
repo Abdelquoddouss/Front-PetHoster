@@ -34,12 +34,10 @@ export class LoginComponent {
         next: (response) => {
           console.log('Login successful', response);
 
-          // Décoder le token pour obtenir le rôle de l'utilisateur
           const token = response.token;
           const decodedToken: any = jwtDecode(token);
-          const userRole = decodedToken.role; // Assurez-vous que le rôle est inclus dans le token
+          const userRole = decodedToken.role;
 
-          // Rediriger en fonction du rôle
           if (userRole === 'ADMIN') {
             this.router.navigate(['/admin-dashboard']);
           } else if (userRole === 'HEBERGEUR') {

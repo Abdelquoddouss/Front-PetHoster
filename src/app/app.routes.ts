@@ -13,6 +13,7 @@ import {CrudTypeAnimalComponent} from "./Crud/crud-type-animal/crud-type-animal.
 import {CrudAnimalComponent} from "./Crud/crud-animal/crud-animal.component";
 import {CrudHebergementComponent} from "./Crud/crud-hebergement/crud-hebergement.component";
 import {FormHebergementComponent} from "./form-hebergement/form-hebergement.component";
+import {DashboardAdminComponent} from "./dashboard-admin/dashboard-admin.component";
 
 export const routes: Routes = [
 
@@ -26,7 +27,16 @@ export const routes: Routes = [
 
   { path: 'heros', component: HerosComponent },
 
-  { path: 'crud-user', component: CrudUserComponent },
+
+  { path: 'dashboard-admin',
+    component: DashboardAdminComponent,
+  children:[
+    { path: 'crud-animal', component: CrudAnimalComponent },
+    { path: 'crud-user', component: CrudUserComponent },
+
+  ]
+
+  },
 
 
   { path: '',
@@ -42,7 +52,6 @@ export const routes: Routes = [
     component: SidebarComponent,
     children: [
       { path: 'crud-typeanimal', component: CrudTypeAnimalComponent },
-      { path: 'crud-animal', component: CrudAnimalComponent },
       { path: 'crud-herbergement', component: CrudHebergementComponent },
       { path: 'form-herbergement', component: FormHebergementComponent },
 
