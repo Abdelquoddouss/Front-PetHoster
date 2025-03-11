@@ -32,7 +32,7 @@ export class LoginComponent {
       this.authService.login(loginData).subscribe({
         next: (response) => {
           console.log('Login successful', response);
-          this.router.navigate(['/']); // Rediriger vers la page d'accueil après la connexion
+          this.router.navigate(['/home']);
         },
         error: (err) => {
           console.error('Login failed', err);
