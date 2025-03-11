@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {Observable, tap} from "rxjs";
 import {Utilisateur} from "../interface/utilisateur";
 
 @Injectable({
@@ -26,5 +26,17 @@ export class UtilisateurService {
   deleteUser(id: string): Observable<any> {
     const headers = this.getHeaders();
     return this.http.delete(`${this.apiUrl}/${id}`, { headers });
+  }
+
+  updateUserRole(userId: string, role: string): Observable<any> {
+    const url = `${this.apiUrl}/${userId}/role`; // URL de l'API backend
+    const headers = this.getHeaders(); // Récupérer les en-têtes avec le token
+    const params = { role: role }; // Paramètre pour le nouveau rôle
+
+    return this.http.put<any>(url, null, { headers, params }).pipe(
+      tap(response => {
+        console.log('Rôle mis à jour avec succès', response);
+      })
+    );
   }
 }

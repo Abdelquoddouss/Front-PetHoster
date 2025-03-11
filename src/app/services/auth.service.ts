@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
+import {jwtDecode} from "jwt-decode";
 
 
 @Injectable({
@@ -21,6 +22,14 @@ export class AuthService {
         // Stocker le token dans le localStorage
         if (response.token) {
           localStorage.setItem('authToken', response.token);
+
+          // Décoder le token pour extraire l'ID de l'utilisateur
+          const decodedToken: any = jwtDecode(response.token);
+          const userId = decodedToken.id;
+
+          if (userId) {
+            localStorage.setItem('userId', userId);
+          }
         }
       })
     );
@@ -34,10 +43,12 @@ export class AuthService {
   // Méthode pour déconnecter l'utilisateur
   logout(): void {
     localStorage.removeItem('authToken');
+    localStorage.removeItem('userId');
   }
 
   // Méthode pour récupérer le token
   getToken(): string | null {
     return localStorage.getItem('authToken');
   }
+
 }
