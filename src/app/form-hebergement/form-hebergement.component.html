@@ -1,111 +1,109 @@
-<!-- component -->
 <div class="min-h-screen p-6 bg-gray-100 flex items-center justify-center">
   <div class="container max-w-screen-lg mx-auto">
     <div>
-
       <div class="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
         <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
           <div class="text-gray-600">
-            <p class="font-medium text-lg">Hebergement</p>
+            <p class="font-medium text-lg">Créer un Hébergement</p>
+            <p>Veuillez compléter tous les champs obligatoires.</p>
           </div>
 
           <div class="lg:col-span-2">
-            <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
-              <div class="md:col-span-5">
-                <label for="full_name">nom</label>
-                <input type="text" name="full_name" id="full_name" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" value="" />
+            <form [formGroup]="hebergeurForm" (ngSubmit)="onSubmit()">
+              <!-- Message d'erreur général -->
+              <div *ngIf="errorMessage" class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
+                {{ errorMessage }}
               </div>
 
-              <div class="md:col-span-5">
-                <label for="email">prenom</label>
-                <input type="text" name="email" id="email" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" value="" placeholder="email@domain.com" />
-              </div>
+              <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
+                <!-- Tarif par jour -->
+                <div class="md:col-span-5">
+                  <label for="tarifParJour" class="block mb-1">Tarif par Jour</label>
+                  <input
+                    type="number"
+                    id="tarifParJour"
+                    formControlName="tarifParJour"
+                    class="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                  />
+                  <div *ngIf="hebergeurForm.get('tarifParJour')?.invalid && hebergeurForm.get('tarifParJour')?.touched"
+                       class="text-red-500 text-sm mt-1">
+                    Le tarif par jour est obligatoire et doit être un nombre positif.
+                  </div>
+                </div>
 
-              <div class="md:col-span-5">
-                <label for="email">prenom</label>
-                <input type="text" name="" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" value="" placeholder="email@domain.com" />
-              </div>
+                <!-- Description du service -->
+                <div class="md:col-span-5">
+                  <label for="descriptionService" class="block mb-1">Description du Service</label>
+                  <textarea
+                    id="descriptionService"
+                    formControlName="descriptionService"
+                    class="h-20 border mt-1 rounded px-4 w-full bg-gray-50"
+                  ></textarea>
+                  <div *ngIf="hebergeurForm.get('descriptionService')?.invalid && hebergeurForm.get('descriptionService')?.touched"
+                       class="text-red-500 text-sm mt-1">
+                    La description est obligatoire et ne doit pas dépasser 500 caractères.
+                  </div>
+                </div>
 
-              <div class="md:col-span-2">
-                <label for="city">City</label>
-                <input type="text" name="city" id="city" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" value="" placeholder="" />
-              </div>
+                <!-- Types d'animaux acceptés -->
+                <div class="md:col-span-5">
+                  <label for="typeAnimauxAcceptesIds" class="block mb-1">Types d'animaux acceptés</label>
+                  <select
+                    id="typeAnimauxAcceptesIds"
+                    formControlName="typeAnimauxAcceptesIds"
+                    class="h-20 border mt-1 rounded px-4 w-full bg-gray-50"
+                    multiple
+                  >
+                    <option *ngFor="let type of typesAnimaux" [value]="type.id">
+                      {{ type.animalType }}
+                    </option>
+                  </select>
+                  <div *ngIf="hebergeurForm.get('typeAnimauxAcceptesIds')?.invalid && hebergeurForm.get('typeAnimauxAcceptesIds')?.touched"
+                       class="text-red-500 text-sm mt-1">
+                    Les types d'animaux acceptés sont obligatoires.
+                  </div>
+                </div>
 
-              <div class="md:col-span-2">
-                <label for="country">Country / region</label>
-                <div class="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                  <input name="country" id="country" placeholder="Country" class="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent" value="" />
-                  <button tabindex="-1" class="cursor-pointer outline-none focus:outline-none transition-all text-gray-300 hover:text-red-600">
-                    <svg class="w-4 h-4 mx-2 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                  </button>
-                  <button tabindex="-1" for="show_more" class="cursor-pointer outline-none focus:outline-none border-l border-gray-200 transition-all text-gray-300 hover:text-blue-600">
-                    <svg class="w-4 h-4 mx-2 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                <!-- Photos de l'hébergement -->
+                <div class="md:col-span-5">
+                  <label for="photosHebergement" class="block mb-1">Photos de l'hébergement</label>
+                  <input
+                    type="file"
+                    id="photosHebergement"
+                    (change)="onFileChange($event)"
+                    class="block w-full px-3 py-2 mt-1 text-sm text-gray-600 bg-white border border-gray-200 rounded-lg file:bg-gray-200 file:text-gray-700 file:text-sm file:px-4 file:py-1 file:border-none file:rounded-full dark:file:bg-gray-800 dark:file:text-gray-200 dark:text-gray-300 placeholder-gray-400/70 dark:placeholder-gray-500 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:focus:border-blue-300"
+                    multiple
+                    accept="image/*"
+                    [attr.max]="3"
+                  />
+
+                  <!-- Prévisualisation des images -->
+                  <div *ngIf="imagePreviewUrls.length > 0" class="grid grid-cols-3 gap-4 mt-4">
+                    <div *ngFor="let preview of imagePreviewUrls" class="relative">
+                      <img [src]="preview" alt="Prévisualisation" class="w-full h-32 object-cover rounded">
+                    </div>
+                  </div>
+
+                  <div *ngIf="selectedFiles.length > 0" class="mt-2 text-sm text-gray-600">
+                    {{ selectedFiles.length }} image(s) sélectionnée(s) et compressée(s)
+                  </div>
+                </div>
+
+                <!-- Bouton de soumission -->
+                <div class="md:col-span-5 text-right mt-4">
+                  <button
+                    type="submit"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    [disabled]="hebergeurForm.invalid"
+                  >
+                    Créer l'hébergement
                   </button>
                 </div>
               </div>
-
-              <div class="md:col-span-2">
-                <label for="state">State / province</label>
-                <div class="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                  <input name="state" id="state" placeholder="State" class="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent" value="" />
-                  <button tabindex="-1" class="cursor-pointer outline-none focus:outline-none transition-all text-gray-300 hover:text-red-600">
-                    <svg class="w-4 h-4 mx-2 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                  </button>
-                  <button tabindex="-1" for="show_more" class="cursor-pointer outline-none focus:outline-none border-l border-gray-200 transition-all text-gray-300 hover:text-blue-600">
-                    <svg class="w-4 h-4 mx-2 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
-                  </button>
-                </div>
-              </div>
-
-              <div class="md:col-span-1">
-                <label for="zipcode">Zipcode</label>
-                <input type="text" name="zipcode" id="zipcode" class="transition-all flex items-center h-10 border mt-1 rounded px-4 w-full bg-gray-50" placeholder="" value="" />
-              </div>
-
-              <div class="md:col-span-5">
-                <div class="inline-flex items-center">
-                  <input type="checkbox" name="billing_same" id="billing_same" class="form-checkbox" />
-                  <label for="billing_same" class="ml-2">My billing address is different than above.</label>
-                </div>
-              </div>
-
-              <div class="md:col-span-2">
-                <label for="soda">How many soda pops?</label>
-                <div class="h-10 w-28 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                  <button tabindex="-1" for="show_more" class="cursor-pointer outline-none focus:outline-none border-r border-gray-200 transition-all text-gray-500 hover:text-blue-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                    </svg>
-                  </button>
-                  <input name="soda" id="soda" placeholder="0" class="px-2 text-center appearance-none outline-none text-gray-800 w-full bg-transparent" value="0" />
-                  <button tabindex="-1" for="show_more" class="cursor-pointer outline-none focus:outline-none border-l border-gray-200 transition-all text-gray-500 hover:text-blue-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-2 fill-current" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-
-              <div class="md:col-span-5 text-right">
-                <div class="inline-flex items-end">
-                  <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit</button>
-                </div>
-              </div>
-
-            </div>
+            </form>
           </div>
         </div>
       </div>
     </div>
-
-    <a href="https://www.buymeacoffee.com/dgauderman" target="_blank" class="md:absolute bottom-0 right-0 p-4 float-right">
-      <img src="https://www.buymeacoffee.com/assets/img/guidelines/logo-mark-3.svg" alt="Buy Me A Coffee" class="transition-all rounded-full w-14 -rotate-45 hover:shadow-sm shadow-lg ring hover:ring-4 ring-white">
-    </a>
   </div>
 </div>

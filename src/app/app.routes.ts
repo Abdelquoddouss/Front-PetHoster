@@ -14,6 +14,7 @@ import {CrudAnimalComponent} from "./Crud/crud-animal/crud-animal.component";
 import {CrudHebergementComponent} from "./Crud/crud-hebergement/crud-hebergement.component";
 import {FormHebergementComponent} from "./form-hebergement/form-hebergement.component";
 import {DashboardAdminComponent} from "./dashboard-admin/dashboard-admin.component";
+import {DetailHebergementComponent} from "./detail-hebergement/detail-hebergement.component";
 
 export const routes: Routes = [
 
@@ -35,7 +36,6 @@ export const routes: Routes = [
     { path: 'crud-user', component: CrudUserComponent },
     { path: 'crud-typeanimal', component: CrudTypeAnimalComponent },
 
-
   ]
 
   },
@@ -47,6 +47,8 @@ export const routes: Routes = [
   children: [
     { path: 'home', component: HomeComponent },
     { path: 'heb', component: HebergementComponent },
+    { path: 'detail-hebergement', component: DetailHebergementComponent },
+
   ]},
 
   {

@@ -1,33 +1,24 @@
 <div class="p-4">
-  <h2 class="text-lg font-semibold">Gestion des Hebergement</h2>
-  <button routerLink="/dashboard-hebergeur/form-herbergement" class="bg-blue-500 text-white px-4 py-2 rounded-md mt-4" >Ajouter un  Hebergement</button>
-  <table class="min-w-full mt-4">
-    <thead>
+  <h2 class="text-lg font-semibold">Gestion des Hébergements</h2>
+  <div *ngIf="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+    {{ errorMessage }}
+  </div>
+  <table class="min-w-full mt-4 bg-white shadow-md rounded-lg overflow-hidden">
+    <thead class="bg-gray-200">
     <tr>
-      <th class="px-4 py-2">nom</th>
-      <th class="px-4 py-2">prenom</th>
-      <th class="px-4 py-2">email</th>
-      <th class="px-4 py-2">telephone</th>
-      <th class="px-4 py-2">adresse</th>
-      <th class="px-4 py-2">tarifParJour</th>
-      <th class="px-4 py-2">descriptionService</th>
-      <th class="px-4 py-2">photosHebergement</th>
-
+      <th class="px-4 py-2">Tarif par Jour</th>
+      <th class="px-4 py-2">Description</th>
+      <th class="px-4 py-2">Types d'animaux acceptés</th>
+      <th class="px-4 py-2">Actions</th>
     </tr>
     </thead>
     <tbody>
-    <tr>
-      <td class="border px-4 py-2"></td>
-      <td class="border px-4 py-2"></td>
-      <td class="border px-4 py-2"></td>
-      <td class="border px-4 py-2"></td>
-      <td class="border px-4 py-2">
-      </td>
-      <td class="border px-4 py-2"></td>
-      <td class="border px-4 py-2"></td>
-      <td class="border px-4 py-2"></td>
-      <td class="border px-4 py-2">
-        <button class="bg-yellow-500 text-white px-2 py-1 rounded-md" >Modifier</button>
+    <tr *ngFor="let hebergeur of hebergeurs" class="border-b">
+      <td class="px-4 py-2">{{ hebergeur.tarifParJour }}</td>
+      <td class="px-4 py-2">{{ hebergeur.descriptionService }}</td>
+      <td class="px-4 py-2">{{ hebergeur.typeAnimauxAcceptesIds.join(', ') }}</td>
+      <td class="px-4 py-2">
+        <button class="bg-yellow-500 text-white px-2 py-1 rounded-md">Modifier</button>
         <button class="bg-red-500 text-white px-2 py-1 rounded-md ml-2" >Supprimer</button>
       </td>
     </tr>
