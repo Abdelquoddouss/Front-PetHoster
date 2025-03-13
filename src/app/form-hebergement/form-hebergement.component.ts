@@ -157,7 +157,7 @@ export class FormHebergementComponent implements OnInit {
 
         // Redirect after success
         setTimeout(() => {
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/dashboard-hebergeur']);
         }, 3000);
       },
       error: (error) => {
