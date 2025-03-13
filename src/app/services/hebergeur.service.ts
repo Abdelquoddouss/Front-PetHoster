@@ -13,7 +13,7 @@ export class HebergeurService {
 
   private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('authToken');
-    // Note: For FormData, don't set Content-Type - browser will set it with boundary
+    // Remove Content-Type for FormData
     return new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
@@ -45,8 +45,7 @@ export class HebergeurService {
 
     return this.http.post<HebergeurResponse>(`${this.apiUrl}/${userId}`, formData, {
       headers,
-      // Add observe: 'response' to get the full response including headers
-      // This can help debug issues
+      reportProgress: true, // This will allow tracking upload progress if needed
     }).pipe(
       catchError(this.handleError)
     );

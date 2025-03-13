@@ -127,11 +127,10 @@ export class FormHebergementComponent implements OnInit {
     const formData = new FormData();
 
     // Add form values
-    Object.keys(this.hebergementForm.value).forEach(key => {
-      formData.append(key, this.hebergementForm.value[key]);
-    });
+    formData.append('tarifParJour', this.hebergementForm.value.tarifParJour);
+    formData.append('descriptionService', this.hebergementForm.value.descriptionService);
 
-    // Add animal types
+    // Add animal types - send as a string representing JSON array
     formData.append('typeAnimauxAcceptesIds', JSON.stringify(this.selectedAnimalTypes));
 
     // Add photos
@@ -140,9 +139,6 @@ export class FormHebergementComponent implements OnInit {
         formData.append('photosHebergement', file, file.name);
       }
     });
-
-    // Log the FormData for debugging
-    console.log('FormData being sent:', formData);
 
     // Submit the form
     this.hebergeurService.createHebergeur(formData).subscribe({
