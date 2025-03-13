@@ -136,6 +136,7 @@ export class FormHebergementComponent implements OnInit {
     // Add photos
     this.selectedFiles.forEach((file, index) => {
       if (file) {
+        // Use 'photosHebergement' as the field name to match the backend
         formData.append('photosHebergement', file, file.name);
       }
     });
