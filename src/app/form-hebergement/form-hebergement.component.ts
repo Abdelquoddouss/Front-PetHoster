@@ -1,177 +1,185 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HebergeurService } from '../services/hebergeur.service';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { TypeAnimal } from '../interface/type-animal';
-import { TypaAnimalService } from '../services/typa-animal.service';
+import { HebergeurService } from '../services/hebergeur.service';
+import { HebergeurResponse } from '../interface/hebergeur-response';
+import Swal from 'sweetalert2';
+import { NgForOf, NgIf } from "@angular/common";
+import { TypaAnimalService } from '../services/typa-animal.service'; // Import the service
+import { TypeAnimal } from '../interface/type-animal'; // Import the TypeAnimal interface
 
 @Component({
   selector: 'app-form-hebergement',
+  templateUrl: './form-hebergement.component.html',
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    CommonModule
+    NgForOf,
+    NgIf
   ],
-  templateUrl: './form-hebergement.component.html',
   styleUrls: ['./form-hebergement.component.css']
 })
-export class FormHebergementComponent {
-  hebergeurForm: FormGroup;
-  errorMessage: string | null = null;
-  typesAnimaux: TypeAnimal[] = [];
-  selectedFiles: File[] = [];
-  imagePreviewUrls: string[] = []; // Pour prévisualiser les images
+export class FormHebergementComponent implements OnInit {
+  hebergementForm: FormGroup = new FormGroup({});
+  selectedFiles: File[] = []; // Array to hold up to 3 files
+  isSubmitting = false;
+
+  // Dynamic animal types fetched from the backend
+  typeAnimauxOptions: TypeAnimal[] = [];
+
+  selectedAnimalTypes: string[] = [];
 
   constructor(
     private fb: FormBuilder,
     private hebergeurService: HebergeurService,
-    private typeAnimalService: TypaAnimalService,
+    private typeAnimalService: TypaAnimalService, // Inject the service
     private router: Router
   ) {
-    this.hebergeurForm = this.fb.group({
-      tarifParJour: ['', [Validators.required, Validators.min(0)]],
-      descriptionService: ['', [Validators.required, Validators.maxLength(500)]],
-      typeAnimauxAcceptesIds: [[], Validators.required],
-      photosHebergement: [[]]
-    });
+    this.initForm();
   }
 
   ngOnInit(): void {
-    this.loadTypesAnimaux();
-    this.testAuthentication();
+    // Fetch animal types from the backend
+    this.loadAnimalTypes();
   }
 
-  loadTypesAnimaux(): void {
+  initForm(): void {
+    this.hebergementForm = this.fb.group({
+      tarifParJour: ['', [Validators.required, Validators.min(0)]],
+      descriptionService: ['', Validators.required]
+    });
+  }
+
+  // Fetch animal types from the backend
+  loadAnimalTypes(): void {
     this.typeAnimalService.getAllTypeAnimals().subscribe({
-      next: (data) => {
-        this.typesAnimaux = data;
+      next: (data: TypeAnimal[]) => {
+        this.typeAnimauxOptions = data; // Populate the array with data from the backend
       },
       error: (err) => {
-        this.errorMessage = 'Erreur lors du chargement des types d\'animaux. Veuillez réessayer plus tard.';
-        console.error(err);
+        console.error('Erreur lors du chargement des types d\'animaux:', err);
+        Swal.fire({
+          title: 'Erreur',
+          text: 'Impossible de charger les types d\'animaux. Veuillez réessayer plus tard.',
+          icon: 'error',
+          confirmButtonColor: '#c1121f'
+        });
       }
     });
   }
 
-  testAuthentication(): void {
-    this.hebergeurService.getAllHebergeurs().subscribe({
-      next: (data) => {
-        console.log('Appel réussi, autorisations OK:', data);
-      },
-      error: (err) => {
-        console.error('Erreur d\'autorisation:', err);
-      }
-    });
-  }
-
-  onFileChange(event: any): void {
-    const files = Array.from(event.target.files) as File[];
-    if (!files.length) return;
-
-    const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
-    const validFiles = files.filter(file => file.size <= MAX_FILE_SIZE);
-
-    if (validFiles.length !== files.length) {
-      this.errorMessage = 'Certaines images sont trop volumineuses. La taille maximale est de 2MB.';
-      return;
+  onFileSelected(event: any, index: number): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFiles[index] = file;
     }
-
-    this.selectedFiles = validFiles;
-    this.imagePreviewUrls = [];
-
-    validFiles.forEach(file => {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.imagePreviewUrls.push(e.target.result);
-      };
-      reader.readAsDataURL(file);
-    });
-
-    this.processAndCompressImages(validFiles);
   }
 
-  // Méthode pour compresser et convertir les images
-  processAndCompressImages(files: File[]): void {
-    const base64Images: string[] = [];
-    let processed = 0;
+  onAnimalTypeChange(event: any): void {
+    const animalId = event.target.value;
+    const isChecked = event.target.checked;
 
-    files.forEach((file) => {
-      const img = new Image();
-      const reader = new FileReader();
-
-      reader.onload = (e: any) => {
-        img.src = e.target.result;
-
-        img.onload = () => {
-          // Créer un canvas pour la compression
-          const canvas = document.createElement('canvas');
-
-          // Définir les dimensions maximales
-          const MAX_WIDTH = 400;
-          const MAX_HEIGHT = 300;
-
-          // Calculer les dimensions en gardant le ratio
-          let width = img.width;
-          let height = img.height;
-
-          if (width > height) {
-            if (width > MAX_WIDTH) {
-              height *= MAX_WIDTH / width;
-              width = MAX_WIDTH;
-            }
-          } else {
-            if (height > MAX_HEIGHT) {
-              width *= MAX_HEIGHT / height;
-              height = MAX_HEIGHT;
-            }
-          }
-
-          // Redimensionner l'image
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx?.drawImage(img, 0, 0, width, height);
-
-          // Obtenir l'image compressée en base64
-          const compressedImage = canvas.toDataURL('image/jpeg', 0.5);
-
-          base64Images.push(compressedImage);
-          processed++;
-
-          if (processed === files.length) {
-            this.hebergeurForm.patchValue({ photosHebergement: base64Images });
-            console.log(`${processed} images compressées et converties`);
-          }
-        };
-      };
-
-      reader.readAsDataURL(file);
-    });
+    if (isChecked) {
+      if (!this.selectedAnimalTypes.includes(animalId)) {
+        this.selectedAnimalTypes.push(animalId);
+      }
+    } else {
+      this.selectedAnimalTypes = this.selectedAnimalTypes.filter(id => id !== animalId);
+    }
   }
 
   onSubmit(): void {
-    if (this.hebergeurForm.valid) {
-      const hebergeurData = this.hebergeurForm.value;
-      console.log('Formulaire soumis avec les données:', {
-        ...hebergeurData,
-        photosHebergement: hebergeurData.photosHebergement ?
-          `${hebergeurData.photosHebergement.length} photos` : 'aucune photo'
+    if (this.hebergementForm.invalid) {
+      Swal.fire({
+        title: 'Erreur de validation',
+        text: 'Veuillez remplir tous les champs obligatoires.',
+        icon: 'error',
+        confirmButtonColor: '#c1121f'
       });
-
-      this.hebergeurService.createHebergeur(hebergeurData).subscribe({
-        next: (response) => {
-          console.log('Hébergement créé avec succès:', response);
-          this.router.navigate(['/dashboard-hebergeur/crud-hebergement']);
-        },
-        error: (err) => {
-          this.errorMessage = 'Erreur lors de la création de l\'hébergement. Veuillez réessayer plus tard.';
-          console.error('Erreur détaillée:', err);
-        }
-      });
-    } else {
-      this.errorMessage = 'Veuillez remplir tous les champs obligatoires.';
-      console.log('Formulaire invalide:', this.hebergeurForm.errors);
+      return;
     }
+
+    // Check if at least one file is selected
+    if (!this.selectedFiles.some(file => file !== null && file !== undefined)) {
+      Swal.fire({
+        title: 'Erreur de validation',
+        text: 'Veuillez télécharger au moins une photo de votre hébergement.',
+        icon: 'error',
+        confirmButtonColor: '#c1121f'
+      });
+      return;
+    }
+
+    // Check if at least one animal type is selected
+    if (this.selectedAnimalTypes.length === 0) {
+      Swal.fire({
+        title: 'Erreur de validation',
+        text: 'Veuillez sélectionner au moins un type d\'animal accepté.',
+        icon: 'error',
+        confirmButtonColor: '#c1121f'
+      });
+      return;
+    }
+
+    this.isSubmitting = true;
+
+    // Create FormData
+    const formData = new FormData();
+
+    // Add form values
+    Object.keys(this.hebergementForm.value).forEach(key => {
+      formData.append(key, this.hebergementForm.value[key]);
+    });
+
+    // Add animal types
+    formData.append('typeAnimauxAcceptesIds', JSON.stringify(this.selectedAnimalTypes));
+
+    // Add photos
+    this.selectedFiles.forEach((file, index) => {
+      if (file) {
+        formData.append('photosHebergement', file, file.name);
+      }
+    });
+
+    // Log the FormData for debugging
+    console.log('FormData being sent:', formData);
+
+    // Submit the form
+    this.hebergeurService.createHebergeur(formData).subscribe({
+      next: (response: HebergeurResponse) => {
+        console.log('Hébergeur créé avec succès:', response);
+
+        Swal.fire({
+          title: 'Succès!',
+          text: 'Votre service d\'hébergement a été enregistré avec succès',
+          icon: 'success',
+          timer: 3000,
+          timerProgressBar: true,
+          showConfirmButton: false
+        });
+
+        // Redirect after success
+        setTimeout(() => {
+          this.router.navigate(['/dashboard']);
+        }, 3000);
+      },
+      error: (error) => {
+        console.error('Erreur lors de la création de l\'hébergeur:', error);
+
+        // More detailed error logging
+        if (error.error && error.error.message) {
+          console.error('Error message from server:', error.error.message);
+        }
+
+        Swal.fire({
+          title: 'Erreur',
+          text: 'Échec de l\'enregistrement de votre hébergement: ' + (error.error?.message || error.message || 'Erreur inconnue'),
+          icon: 'error',
+          confirmButtonColor: '#c1121f'
+        });
+
+        this.isSubmitting = false;
+      },
+    });
   }
 }

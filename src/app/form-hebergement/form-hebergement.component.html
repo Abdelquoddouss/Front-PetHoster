@@ -1,103 +1,87 @@
+<!-- component -->
 <div class="min-h-screen p-6 bg-gray-100 flex items-center justify-center">
   <div class="container max-w-screen-lg mx-auto">
     <div>
       <div class="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
         <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
           <div class="text-gray-600">
-            <p class="font-medium text-lg">Créer un Hébergement</p>
-            <p>Veuillez compléter tous les champs obligatoires.</p>
+            <p class="font-medium text-lg">Hebergement</p>
+            <p>Veuillez remplir tous les champs pour enregistrer votre service d'hébergement.</p>
           </div>
 
           <div class="lg:col-span-2">
-            <form [formGroup]="hebergeurForm" (ngSubmit)="onSubmit()">
-              <!-- Message d'erreur général -->
-              <div *ngIf="errorMessage" class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
-                {{ errorMessage }}
-              </div>
-
+            <form [formGroup]="hebergementForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
               <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
-                <!-- Tarif par jour -->
-                <div class="md:col-span-5">
-                  <label for="tarifParJour" class="block mb-1">Tarif par Jour</label>
-                  <input
-                    type="number"
-                    id="tarifParJour"
-                    formControlName="tarifParJour"
-                    class="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                  />
-                  <div *ngIf="hebergeurForm.get('tarifParJour')?.invalid && hebergeurForm.get('tarifParJour')?.touched"
-                       class="text-red-500 text-sm mt-1">
-                    Le tarif par jour est obligatoire et doit être un nombre positif.
-                  </div>
+                <!-- Nouveaux champs à ajouter -->
+                <div class="md:col-span-2">
+                  <label for="tarifParJour">Tarif par jour (€)</label>
+                  <input type="number" name="tarifParJour" id="tarifParJour" formControlName="tarifParJour" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" min="0" step="0.01" />
                 </div>
 
-                <!-- Description du service -->
                 <div class="md:col-span-5">
-                  <label for="descriptionService" class="block mb-1">Description du Service</label>
-                  <textarea
-                    id="descriptionService"
-                    formControlName="descriptionService"
-                    class="h-20 border mt-1 rounded px-4 w-full bg-gray-50"
-                  ></textarea>
-                  <div *ngIf="hebergeurForm.get('descriptionService')?.invalid && hebergeurForm.get('descriptionService')?.touched"
-                       class="text-red-500 text-sm mt-1">
-                    La description est obligatoire et ne doit pas dépasser 500 caractères.
-                  </div>
+                  <label for="descriptionService">Description de votre service</label>
+                  <textarea name="descriptionService" id="descriptionService" formControlName="descriptionService" rows="4" class="border mt-1 rounded px-4 w-full bg-gray-50"></textarea>
                 </div>
 
-                <!-- Types d'animaux acceptés -->
                 <div class="md:col-span-5">
-                  <label for="typeAnimauxAcceptesIds" class="block mb-1">Types d'animaux acceptés</label>
-                  <select
-                    id="typeAnimauxAcceptesIds"
-                    formControlName="typeAnimauxAcceptesIds"
-                    class="h-20 border mt-1 rounded px-4 w-full bg-gray-50"
-                    multiple
-                  >
-                    <option *ngFor="let type of typesAnimaux" [value]="type.id">
-                      {{ type.animalType }}
-                    </option>
-                  </select>
-                  <div *ngIf="hebergeurForm.get('typeAnimauxAcceptesIds')?.invalid && hebergeurForm.get('typeAnimauxAcceptesIds')?.touched"
-                       class="text-red-500 text-sm mt-1">
-                    Les types d'animaux acceptés sont obligatoires.
-                  </div>
-                </div>
-
-                <!-- Photos de l'hébergement -->
-                <div class="md:col-span-5">
-                  <label for="photosHebergement" class="block mb-1">Photos de l'hébergement</label>
-                  <input
-                    type="file"
-                    id="photosHebergement"
-                    (change)="onFileChange($event)"
-                    class="block w-full px-3 py-2 mt-1 text-sm text-gray-600 bg-white border border-gray-200 rounded-lg file:bg-gray-200 file:text-gray-700 file:text-sm file:px-4 file:py-1 file:border-none file:rounded-full dark:file:bg-gray-800 dark:file:text-gray-200 dark:text-gray-300 placeholder-gray-400/70 dark:placeholder-gray-500 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:focus:border-blue-300"
-                    multiple
-                    accept="image/*"
-                    [attr.max]="3"
-                  />
-
-                  <!-- Prévisualisation des images -->
-                  <div *ngIf="imagePreviewUrls.length > 0" class="grid grid-cols-3 gap-4 mt-4">
-                    <div *ngFor="let preview of imagePreviewUrls" class="relative">
-                      <img [src]="preview" alt="Prévisualisation" class="w-full h-32 object-cover rounded">
+                  <label>Types d'animaux acceptés</label>
+                  <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mt-1">
+                    <div *ngFor="let animal of typeAnimauxOptions" class="flex items-center">
+                      <input type="checkbox"
+                             [id]="'animal_' + animal.id"
+                             [value]="animal.id"
+                             (change)="onAnimalTypeChange($event)"
+                             class="form-checkbox h-5 w-5 text-blue-600" />
+                      <label [for]="'animal_' + animal.id" class="ml-2">{{ animal.animalType }}</label>
                     </div>
                   </div>
+                </div>
 
-                  <div *ngIf="selectedFiles.length > 0" class="mt-2 text-sm text-gray-600">
-                    {{ selectedFiles.length }} image(s) sélectionnée(s) et compressée(s)
+                <div class="md:col-span-5">
+                  <label class="block mb-2">Photos de l'hébergement (maximum 3)</label>
+                  <div class="flex flex-col space-y-2">
+                    <div class="flex items-center space-x-2">
+                      <input type="file" (change)="onFileSelected($event, 0)" accept="image/*" class="block w-full text-sm text-gray-500
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-blue-50 file:text-blue-700
+                        hover:file:bg-blue-100" />
+                      <span *ngIf="selectedFiles[0]" class="text-sm text-green-600">{{ selectedFiles[0].name }}</span>
+                    </div>
+
+                    <div class="flex items-center space-x-2">
+                      <input type="file" (change)="onFileSelected($event, 1)" accept="image/*" class="block w-full text-sm text-gray-500
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-blue-50 file:text-blue-700
+                        hover:file:bg-blue-100" />
+                      <span *ngIf="selectedFiles[1]" class="text-sm text-green-600">{{ selectedFiles[1].name }}</span>
+                    </div>
+
+                    <div class="flex items-center space-x-2">
+                      <input type="file" (change)="onFileSelected($event, 2)" accept="image/*" class="block w-full text-sm text-gray-500
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-blue-50 file:text-blue-700
+                        hover:file:bg-blue-100" />
+                      <span *ngIf="selectedFiles[2]" class="text-sm text-green-600">{{ selectedFiles[2].name }}</span>
+                    </div>
                   </div>
                 </div>
 
-                <!-- Bouton de soumission -->
                 <div class="md:col-span-5 text-right mt-4">
-                  <button
-                    type="submit"
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    [disabled]="hebergeurForm.invalid"
-                  >
-                    Créer l'hébergement
-                  </button>
+                  <div class="inline-flex items-end">
+                    <button type="button" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded mr-2">
+                      Annuler
+                    </button>
+                    <button type="submit" [disabled]="isSubmitting" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                      <span *ngIf="!isSubmitting">Enregistrer</span>
+                      <span *ngIf="isSubmitting">Traitement en cours...</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </form>
