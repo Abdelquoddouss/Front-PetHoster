@@ -1,27 +1,91 @@
-<!--<div class="p-4">-->
-<!--  <h2 class="text-lg font-semibold">Gestion des Hébergements</h2>-->
-<!--  <div *ngIf="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">-->
-<!--    {{ errorMessage }}-->
-<!--  </div>-->
-<!--  <table class="min-w-full mt-4 bg-white shadow-md rounded-lg overflow-hidden">-->
-<!--    <thead class="bg-gray-200">-->
-<!--    <tr>-->
-<!--      <th class="px-4 py-2">Tarif par Jour</th>-->
-<!--      <th class="px-4 py-2">Description</th>-->
-<!--      <th class="px-4 py-2">Types d'animaux acceptés</th>-->
-<!--      <th class="px-4 py-2">Actions</th>-->
-<!--    </tr>-->
-<!--    </thead>-->
-<!--    <tbody>-->
-<!--    <tr *ngFor="let hebergeur of hebergeurs" class="border-b">-->
-<!--      <td class="px-4 py-2">{{ hebergeur.tarifParJour }}</td>-->
-<!--      <td class="px-4 py-2">{{ hebergeur.descriptionService }}</td>-->
-<!--      <td class="px-4 py-2">{{ hebergeur.typeAnimauxAcceptesIds.join(', ') }}</td>-->
-<!--      <td class="px-4 py-2">-->
-<!--        <button class="bg-yellow-500 text-white px-2 py-1 rounded-md">Modifier</button>-->
-<!--        <button class="bg-red-500 text-white px-2 py-1 rounded-md ml-2" >Supprimer</button>-->
-<!--      </td>-->
-<!--    </tr>-->
-<!--    </tbody>-->
-<!--  </table>-->
-<!--</div>-->
+<div class="bg-gray-100 dark:bg-gray-800 py-8">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div *ngIf="hebergement; else noHebergement" class="flex flex-col md:flex-row -mx-4">
+      <!-- Section des images -->
+      <div class="md:flex-1 px-4">
+        <div *ngIf="hebergement.photosHebergement.length > 0; else noImage" class="space-y-4">
+          <!-- Première photo (grande) -->
+          <div class="h-[460px] rounded-lg bg-gray-300 dark:bg-gray-700">
+            <img class="w-full h-full object-cover rounded-lg"
+                 [src]="'http://localhost:8081' + hebergement.photosHebergement[0]"
+                 alt="Photo de l'hébergement"
+                 (error)="onImageError($event, hebergement)">
+          </div>
+
+          <!-- Galerie des autres photos -->
+          <div *ngIf="hebergement.photosHebergement.length > 1" class="grid grid-cols-2 gap-4">
+            <div *ngFor="let photo of hebergement.photosHebergement.slice(1); let i = index">
+              <img class="w-full h-48 object-cover rounded-lg"
+                   [src]="'http://localhost:8081' + photo"
+                   alt="Photo de l'hébergement"
+                   (error)="onImageError($event, hebergement)">
+            </div>
+          </div>
+        </div>
+        <ng-template #noImage>
+          <div class="h-[460px] rounded-lg bg-gray-300 dark:bg-gray-700 mb-4 flex items-center justify-center">
+            <span class="text-gray-500 dark:text-gray-300">Aucune image disponible</span>
+          </div>
+        </ng-template>
+
+        <!-- Boutons pour modifier et supprimer -->
+        <div class="flex -mx-2 mb-4">
+          <div class="w-1/2 px-2">
+            <button (click)="onUpdate(hebergement.id)"
+                    class="w-full bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 dark:hover:bg-gray-700">
+              Modifier
+            </button>
+          </div>
+          <div class="w-1/2 px-2">
+            <button (click)="onDelete(hebergement.id)"
+                    class="w-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white py-2 px-4 rounded-full font-bold hover:bg-gray-300 dark:hover:bg-gray-600">
+              Supprimer
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section des informations -->
+      <div class="md:flex-1 px-4">
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">{{ hebergement.nom }} {{ hebergement.prenom }}</h2>
+        <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+          {{ hebergement.descriptionService }}
+        </p>
+
+        <!-- Tarif par jour -->
+        <div class="flex mb-4">
+          <div class="mr-4">
+            <span class="font-bold text-gray-700 dark:text-gray-300">Tarif par jour:</span>
+            <span class="text-gray-600 dark:text-gray-300">{{ hebergement.tarifParJour }} €</span>
+          </div>
+        </div>
+
+        <!-- Types d'animaux acceptés -->
+        <div class="mb-4">
+          <span class="font-bold text-gray-700 dark:text-gray-300">Types d'animaux acceptés:</span>
+          <ul class="list-disc list-inside mt-2">
+            <li *ngFor="let type of hebergement.typeAnimauxAcceptesNoms"
+                class="text-gray-600 dark:text-gray-300">
+              {{ type }}
+            </li>
+          </ul>
+        </div>
+
+        <!-- Description supplémentaire (optionnelle) -->
+        <div>
+          <span class="font-bold text-gray-700 dark:text-gray-300">Description:</span>
+          <p class="text-gray-600 dark:text-gray-300 text-sm mt-2">
+            {{ hebergement.descriptionService }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Message si aucun hébergement n'est disponible -->
+    <ng-template #noHebergement>
+      <div class="w-full h-64 flex items-center justify-center bg-gray-200 rounded-lg">
+        <span class="text-gray-500">Aucun hébergement enregistré</span>
+      </div>
+    </ng-template>
+  </div>
+</div>

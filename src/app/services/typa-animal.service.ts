@@ -19,7 +19,7 @@ export class TypaAnimalService {
   }
 
   getAllTypeAnimals(): Observable<TypeAnimal[]> {
-    const headers = this.getHeaders();
+    const headers = this.getHeaders(); // Ajoutez les headers d'authentification
     return this.http.get<TypeAnimal[]>(this.apiUrl, { headers });
   }
 

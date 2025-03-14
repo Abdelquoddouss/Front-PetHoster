@@ -50,4 +50,27 @@ export class HebergeurService {
       catchError(this.handleError)
     );
   }
+
+  getHebergeurByUserId(userId: string): Observable<HebergeurResponse> {
+    const headers = this.getHeaders();
+    return this.http.get<HebergeurResponse>(`${this.apiUrl}/${userId}`, { headers }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  updateHebergeur(hebergementId: string, formData: FormData): Observable<HebergeurResponse> {
+    const headers = this.getHeaders();
+    return this.http.put<HebergeurResponse>(`${this.apiUrl}/${hebergementId}`, formData, { headers }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  // Supprimer un hébergement
+  deleteHebergeur(hebergementId: string): Observable<void> {
+    const headers = this.getHeaders();
+    return this.http.delete<void>(`${this.apiUrl}/${hebergementId}`, { headers }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
 }

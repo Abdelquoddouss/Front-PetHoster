@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {RouterLink} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {HebergeurResponse} from "../../interface/hebergeur-response";
 import {HebergeurService} from "../../services/hebergeur.service";
 import {CommonModule} from "@angular/common";
@@ -13,10 +13,57 @@ import {CommonModule} from "@angular/common";
   templateUrl: './crud-hebergement.component.html',
   styleUrl: './crud-hebergement.component.css'
 })
-export class CrudHebergementComponent  {
+export class CrudHebergementComponent implements OnInit {
+  hebergement: HebergeurResponse | null = null;
 
+  constructor(
+    private hebergeurService: HebergeurService,
+    private router: Router
+  ) {}
 
+  ngOnInit(): void {
+    this.loadHebergement();
+  }
 
+  // Charger l'hébergement de l'utilisateur
+  loadHebergement(): void {
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      this.hebergeurService.getHebergeurByUserId(userId).subscribe({
+        next: (data: HebergeurResponse) => {
+          this.hebergement = data;
+        },
+        error: (err) => {
+          console.error('Erreur lors de la récupération de l\'hébergement:', err);
+        }
+      });
+    }
+  }
 
+  // Gestion des erreurs d'image
+  onImageError(event: Event, hebergement: HebergeurResponse) {
+    console.error('Erreur de chargement de l\'image pour l\'hébergement:', hebergement.id);
+    const imgElement = event.target as HTMLImageElement;
+    imgElement.src = 'assets/images/default-image.jpg'; // Chemin vers une image de remplacement
+  }
 
+  // Rediriger vers la page de modification
+  onUpdate(hebergementId: string): void {
+    this.router.navigate(['/update-hebergement', hebergementId]);
+  }
+
+  // Supprimer l'hébergement
+  onDelete(hebergementId: string): void {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet hébergement ?')) {
+      this.hebergeurService.deleteHebergeur(hebergementId).subscribe({
+        next: () => {
+          alert('Hébergement supprimé avec succès');
+          this.hebergement = null; // Réinitialiser l'hébergement
+        },
+        error: (err) => {
+          console.error('Erreur lors de la suppression de l\'hébergement:', err);
+        }
+      });
+    }
+  }
 }
