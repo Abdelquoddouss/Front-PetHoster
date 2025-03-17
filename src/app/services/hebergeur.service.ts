@@ -73,4 +73,11 @@ export class HebergeurService {
     );
   }
 
+  getAllHebergements(): Observable<HebergeurResponse[]> {
+    const token = localStorage.getItem('authToken');
+    const headers = token ? new HttpHeaders({ 'Authorization': `Bearer ${token}` }) : new HttpHeaders();
+    return this.http.get<HebergeurResponse[]>(this.apiUrl, { headers }).pipe(
+      catchError(this.handleError)
+    );
+  }
 }

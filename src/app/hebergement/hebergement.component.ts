@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
-import {HerosComponent} from "../heros/heros.component";
-import {AuthService} from "../services/auth.service";
-import {Router, RouterLink} from "@angular/router";
-import {UtilisateurService} from "../services/utilisateur.service";
-import {CommonModule} from "@angular/common";
+import { Component, OnInit } from '@angular/core';
+import { HerosComponent } from "../heros/heros.component";
+import { AuthService } from "../services/auth.service";
+import { Router, RouterLink } from "@angular/router";
+import { UtilisateurService } from "../services/utilisateur.service";
+import { CommonModule } from "@angular/common";
+import { HebergeurService } from "../services/hebergeur.service";
+import { HebergeurResponse } from "../interface/hebergeur-response";
 
 @Component({
   selector: 'app-hebergement',
@@ -16,18 +18,31 @@ import {CommonModule} from "@angular/common";
   templateUrl: './hebergement.component.html',
   styleUrl: './hebergement.component.css'
 })
-export class HebergementComponent {
+export class HebergementComponent implements OnInit {
   userRole: string | null = null; // Pour stocker le rôle de l'utilisateur
+  hebergements: HebergeurResponse[] = []; // Déclarez la variable pour stocker les hébergements
 
   constructor(
     private authService: AuthService,
     private utilisateurService: UtilisateurService,
-    private router: Router
+    private router: Router,
+    private hebergeurService: HebergeurService,
   ) {}
 
   ngOnInit(): void {
-    // Vérifier le rôle de l'utilisateur au chargement du composant
     this.checkUserRole();
+    this.loadHebergements();
+  }
+
+  loadHebergements(): void {
+    this.hebergeurService.getAllHebergements().subscribe(
+      (data: HebergeurResponse[]) => {
+        this.hebergements = data;
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des hébergements', error);
+      }
+    );
   }
 
   checkUserRole(): void {
