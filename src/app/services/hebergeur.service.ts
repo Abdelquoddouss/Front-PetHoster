@@ -80,4 +80,11 @@ export class HebergeurService {
       catchError(this.handleError)
     );
   }
+
+  resetHebergementFields(hebergementId: string): Observable<void> {
+    const headers = this.getHeaders();
+    return this.http.delete<void>(`${this.apiUrl}/${hebergementId}/reset-hebergement`, { headers }).pipe(
+      catchError(this.handleError)
+    );
+  }
 }

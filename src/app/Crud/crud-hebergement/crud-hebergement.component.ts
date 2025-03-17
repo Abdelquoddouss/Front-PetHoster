@@ -52,16 +52,15 @@ export class CrudHebergementComponent implements OnInit {
     this.router.navigate(['/update-hebergement', hebergementId]);
   }
 
-  // Supprimer l'hébergement
   onDelete(hebergementId: string): void {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet hébergement ?')) {
-      this.hebergeurService.deleteHebergeur(hebergementId).subscribe({
+    if (confirm('Êtes-vous sûr de vouloir supprimer les informations de cet hébergement ?')) {
+      this.hebergeurService.resetHebergementFields(hebergementId).subscribe({
         next: () => {
-          alert('Hébergement supprimé avec succès');
+          alert('Informations de l\'hébergement supprimées avec succès');
           this.hebergement = null; // Réinitialiser l'hébergement
         },
         error: (err) => {
-          console.error('Erreur lors de la suppression de l\'hébergement:', err);
+          console.error('Erreur lors de la suppression des informations de l\'hébergement:', err);
         }
       });
     }
