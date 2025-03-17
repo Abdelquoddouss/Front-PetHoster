@@ -44,7 +44,9 @@
               <div *ngFor="let i of [0, 1, 2]" class="flex items-center space-x-5">
                 <input type="file" (change)="onFileSelected($event, i)" accept="image/*"
                        class="block w-full text-lg text-gray-500 file:mr-5 file:py-4 file:px-8 file:rounded-xl file:border-0 file:text-lg file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition duration-200">
-                <span *ngIf="selectedFiles[i]" class="text-lg text-green-600">{{ selectedFiles[i].name }}</span>
+                <span *ngIf="selectedFiles[i]" class="text-lg text-green-600">
+  {{ selectedFiles[i]?.name }}
+</span>
               </div>
             </div>
           </div>

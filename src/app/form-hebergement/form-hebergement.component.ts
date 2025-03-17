@@ -5,8 +5,8 @@ import { HebergeurService } from '../services/hebergeur.service';
 import { HebergeurResponse } from '../interface/hebergeur-response';
 import Swal from 'sweetalert2';
 import { NgForOf, NgIf } from "@angular/common";
-import { TypaAnimalService } from '../services/typa-animal.service'; // Import the service
-import { TypeAnimal } from '../interface/type-animal'; // Import the TypeAnimal interface
+import { TypaAnimalService } from '../services/typa-animal.service';
+import { TypeAnimal } from '../interface/type-animal';
 
 @Component({
   selector: 'app-form-hebergement',
@@ -21,7 +21,7 @@ import { TypeAnimal } from '../interface/type-animal'; // Import the TypeAnimal 
 })
 export class FormHebergementComponent implements OnInit {
   hebergementForm: FormGroup = new FormGroup({});
-  selectedFiles: File[] = []; // Array to hold up to 3 files
+  selectedFiles: (File | null)[] = [null, null, null]; // Array to hold up to 3 files
   isSubmitting = false;
 
   // Dynamic animal types fetched from the backend
@@ -32,7 +32,7 @@ export class FormHebergementComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private hebergeurService: HebergeurService,
-    private typeAnimalService: TypaAnimalService, // Inject the service
+    private typeAnimalService: TypaAnimalService,
     private router: Router
   ) {
     this.initForm();
@@ -72,6 +72,8 @@ export class FormHebergementComponent implements OnInit {
     const file = event.target.files[0];
     if (file) {
       this.selectedFiles[index] = file;
+    } else {
+      this.selectedFiles[index] = null;
     }
   }
 
@@ -99,18 +101,19 @@ export class FormHebergementComponent implements OnInit {
       return;
     }
 
-    // Check if at least one file is selected
-    if (!this.selectedFiles.some(file => file !== null && file !== undefined)) {
+    // Vérifier que 3 fichiers ont été sélectionnés
+    const filesSelected = this.selectedFiles.filter(file => file !== null).length;
+    if (filesSelected !== 3) {
       Swal.fire({
         title: 'Erreur de validation',
-        text: 'Veuillez télécharger au moins une photo de votre hébergement.',
+        text: 'Veuillez télécharger exactement 3 photos de votre hébergement.',
         icon: 'error',
         confirmButtonColor: '#c1121f'
       });
       return;
     }
 
-    // Check if at least one animal type is selected
+    // Vérifier qu'au moins un type d'animal est sélectionné
     if (this.selectedAnimalTypes.length === 0) {
       Swal.fire({
         title: 'Erreur de validation',
@@ -123,25 +126,24 @@ export class FormHebergementComponent implements OnInit {
 
     this.isSubmitting = true;
 
-    // Create FormData
+    // Créer FormData
     const formData = new FormData();
 
-    // Add form values
+    // Ajouter les valeurs du formulaire
     formData.append('tarifParJour', this.hebergementForm.value.tarifParJour);
     formData.append('descriptionService', this.hebergementForm.value.descriptionService);
 
-    // Add animal types - send as a string representing JSON array
+    // Ajouter les types d'animaux
     formData.append('typeAnimauxAcceptesIds', JSON.stringify(this.selectedAnimalTypes));
 
-    // Add photos
+    // Ajouter les photos
     this.selectedFiles.forEach((file, index) => {
       if (file) {
-        // Use 'photosHebergement' as the field name to match the backend
         formData.append('photosHebergement', file, file.name);
       }
     });
 
-    // Submit the form
+    // Soumettre le formulaire
     this.hebergeurService.createHebergeur(formData).subscribe({
       next: (response: HebergeurResponse) => {
         console.log('Hébergeur créé avec succès:', response);
@@ -155,7 +157,7 @@ export class FormHebergementComponent implements OnInit {
           showConfirmButton: false
         });
 
-        // Redirect after success
+        // Rediriger après le succès
         setTimeout(() => {
           this.router.navigate(['/dashboard-hebergeur']);
         }, 3000);
@@ -163,7 +165,7 @@ export class FormHebergementComponent implements OnInit {
       error: (error) => {
         console.error('Erreur lors de la création de l\'hébergeur:', error);
 
-        // More detailed error logging
+        // Log détaillé de l'erreur
         if (error.error && error.error.message) {
           console.error('Error message from server:', error.error.message);
         }
