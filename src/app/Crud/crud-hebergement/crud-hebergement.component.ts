@@ -47,10 +47,7 @@ export class CrudHebergementComponent implements OnInit {
     imgElement.src = 'assets/images/default-image.jpg'; // Chemin vers une image de remplacement
   }
 
-  // Rediriger vers la page de modification
-  onUpdate(hebergementId: string): void {
-    this.router.navigate(['/update-hebergement', hebergementId]);
-  }
+
 
   onDelete(hebergementId: string): void {
     if (confirm('Êtes-vous sûr de vouloir supprimer les informations de cet hébergement ?')) {
