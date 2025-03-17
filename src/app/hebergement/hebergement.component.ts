@@ -37,7 +37,14 @@ export class HebergementComponent implements OnInit {
   loadHebergements(): void {
     this.hebergeurService.getAllHebergements().subscribe(
       (data: HebergeurResponse[]) => {
-        this.hebergements = data;
+        // Filtrer les hébergements pour ne garder que ceux qui ont les propriétés requises
+        this.hebergements = data.filter(hebergement =>
+          hebergement.tarifParJour !== undefined &&
+          hebergement.descriptionService !== undefined &&
+          hebergement.typeAnimauxAcceptesIds !== undefined &&
+          hebergement.typeAnimauxAcceptesNoms !== undefined &&
+          hebergement.photosHebergement !== undefined
+        );
       },
       (error) => {
         console.error('Erreur lors de la récupération des hébergements', error);
