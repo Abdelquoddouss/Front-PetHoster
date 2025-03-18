@@ -5,6 +5,7 @@ import { HebergeurService } from "../services/hebergeur.service";
 import { ReservationService } from '../services/reservation.service';
 import { CommonModule } from "@angular/common";
 import {FormsModule} from "@angular/forms";
+import {AuthService} from "../services/auth.service";
 
 @Component({
   selector: 'app-detail-hebergement',
@@ -24,11 +25,12 @@ export class DetailHebergementComponent implements OnInit {
     hebergeurId: '',
     proprietaireId: ''
   };
-
+  reservationSubmitted: boolean = false;
   constructor(
     private route: ActivatedRoute,
     private hebergeurService: HebergeurService,
     private reservationService: ReservationService,
+    private authService: AuthService,
     private router: Router
   ) {}
 
@@ -63,15 +65,35 @@ export class DetailHebergementComponent implements OnInit {
   }
 
   submitReservation(): void {
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login']); // Rediriger vers la page de connexion
+      return;
+    }
+
+    // Calculer le montant total en fonction des dates et du tarif par jour
+    const tarifParJour = this.hebergement?.tarifParJour || 0;
+    const dateDebut = new Date(this.reservationRequest.dateDebut);
+    const dateFin = new Date(this.reservationRequest.dateFin);
+    const nombreJours = Math.ceil((dateFin.getTime() - dateDebut.getTime()) / (1000 * 60 * 60 * 24));
+    const montantTotal = tarifParJour * nombreJours;
+
+    this.reservationRequest.montantTotal = montantTotal; // Ajouter le montant total à la requête
     this.reservationRequest.proprietaireId = localStorage.getItem('userId');
+
     this.reservationService.createReservation(this.reservationRequest).subscribe({
       next: (response) => {
         console.log('Réservation créée avec succès', response);
-        this.closeReservationModal();
-        // Rediriger ou afficher un message de succès
+        this.reservationSubmitted = true; // Activer l'affichage du message de succès
       },
       error: (error) => {
         console.error('Erreur lors de la création de la réservation', error);
+        if (error.status === 400) {
+          alert('Les données de réservation sont invalides. Veuillez vérifier les informations saisies.');
+        } else if (error.status === 500) {
+          alert('Une erreur interne est survenue. Veuillez réessayer plus tard.');
+        } else {
+          alert('Une erreur est survenue lors de la création de la réservation. Veuillez réessayer.');
+        }
       }
     });
   }

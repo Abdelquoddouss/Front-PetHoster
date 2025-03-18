@@ -140,6 +140,16 @@
                     <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Réserver</button>
                   </div>
                 </form>
+                <div *ngIf="reservationSubmitted" class="text-center">
+                  <p class="text-green-600 font-bold">Votre réservation a été soumise avec succès.</p>
+                  <p class="text-gray-700 mt-2">Veuillez attendre l'acceptation de l'hébergeur.</p>
+                  <button
+                    (click)="closeReservationModal()"
+                    class="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                  >
+                    Fermer
+                  </button>
+                </div>
               </div>
             </div>
           </div>
