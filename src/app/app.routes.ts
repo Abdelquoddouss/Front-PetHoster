@@ -17,50 +17,35 @@ import {DashboardAdminComponent} from "./dashboard-admin/dashboard-admin.compone
 import {DetailHebergementComponent} from "./detail-hebergement/detail-hebergement.component";
 
 export const routes: Routes = [
-
-
   { path: 'footer', component: FooterComponent },
   { path: 'nav', component: NavbarComponent },
-
   { path: 'register', component: RegisterComponent },
-
   { path: 'login', component: LoginComponent },
-
   { path: 'heros', component: HerosComponent },
-
   { path: 'crud-animal', component: CrudAnimalComponent },
-
-  { path: 'dashboard-admin',
+  {
+    path: 'dashboard-admin',
     component: DashboardAdminComponent,
-  children:[
-    { path: 'crud-user', component: CrudUserComponent },
-    { path: 'crud-typeanimal', component: CrudTypeAnimalComponent },
-
-  ]
-
+    children: [
+      { path: 'crud-user', component: CrudUserComponent },
+      { path: 'crud-typeanimal', component: CrudTypeAnimalComponent },
+    ],
   },
-
-
-  { path: '',
+  {
+    path: '',
     component: LayoutComponent,
-
-  children: [
-    { path: 'home', component: HomeComponent },
-    { path: 'heb', component: HebergementComponent },
-    { path: 'detail-hebergement', component: DetailHebergementComponent },
-
-  ]},
-
+    children: [
+      { path: 'home', component: HomeComponent },
+      { path: 'heb', component: HebergementComponent },
+      { path: 'detail-hebergement/:id', component: DetailHebergementComponent },
+    ],
+  },
   {
     path: 'dashboard-hebergeur',
     component: SidebarComponent,
     children: [
       { path: 'crud-herbergement', component: CrudHebergementComponent },
       { path: 'form-herbergement', component: FormHebergementComponent },
-
-
-
-    ]
+    ],
   },
-
 ];

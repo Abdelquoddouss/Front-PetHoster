@@ -72,6 +72,10 @@ export class HebergeurService {
       catchError(this.handleError)
     );
   }
+  getHebergeurById(id: string): Observable<HebergeurResponse> {
+    const headers = this.getHeaders(); // Inclure les en-têtes avec le token
+    return this.http.get<HebergeurResponse>(`${this.apiUrl}/${id}`, { headers });
+  }
 
   getAllHebergements(): Observable<HebergeurResponse[]> {
     const token = localStorage.getItem('authToken');
