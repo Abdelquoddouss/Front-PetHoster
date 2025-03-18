@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { HebergeurResponse } from '../interface/hebergeur-response';
 
@@ -10,14 +10,6 @@ export class HebergeurService {
   private apiUrl = 'http://localhost:8081/api/hebergeurs';
 
   constructor(private http: HttpClient) {}
-
-  private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('authToken');
-    // Remove Content-Type for FormData
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-  }
 
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'Une erreur inconnue est survenue';
@@ -33,62 +25,89 @@ export class HebergeurService {
         }
       }
     }
-    console.error('API Error:', error);
-    return throwError(() => error); // Return the full error object for more info
+    console.error('API Error:', errorMessage);
+    return throwError(() => error);
   }
 
   createHebergeur(formData: FormData): Observable<HebergeurResponse> {
     const userId = localStorage.getItem('userId');
-    const headers = this.getHeaders();
+
+    if (!userId) {
+      return throwError(() => new Error('User ID not found in localStorage'));
+    }
 
     console.log('Sending request to:', `${this.apiUrl}/${userId}`);
 
-    return this.http.post<HebergeurResponse>(`${this.apiUrl}/${userId}`, formData, {
-      headers,
-      reportProgress: true, // This will allow tracking upload progress if needed
-    }).pipe(
-      catchError(this.handleError)
+    return this.http.post<HebergeurResponse>(
+      `${this.apiUrl}/${userId}`,
+      formData
+    ).pipe(
+      catchError((error) => this.handleError(error))
+    );
+  }
+
+  uploadHebergeurPhotos(hebergeurId: string, photos: File[]): Observable<HebergeurResponse> {
+    const formData = new FormData();
+    photos.forEach((photo) => {
+      formData.append('photos', photo);
+    });
+
+    return this.http.post<HebergeurResponse>(
+      `${this.apiUrl}/${hebergeurId}/upload-photos`,
+      formData
+    ).pipe(
+      catchError((error) => this.handleError(error))
     );
   }
 
   getHebergeurByUserId(userId: string): Observable<HebergeurResponse> {
-    const headers = this.getHeaders();
-    return this.http.get<HebergeurResponse>(`${this.apiUrl}/${userId}`, { headers }).pipe(
-      catchError(this.handleError)
+    console.log('Getting hebergeur with userId:', userId);
+
+    return this.http.get<HebergeurResponse>(
+      `${this.apiUrl}/${userId}`
+    ).pipe(
+      catchError((error) => this.handleError(error))
     );
   }
 
-  updateHebergeur(hebergementId: string, formData: FormData): Observable<HebergeurResponse> {
-    const headers = this.getHeaders();
-    return this.http.put<HebergeurResponse>(`${this.apiUrl}/${hebergementId}`, formData, { headers }).pipe(
-      catchError(this.handleError)
+  updateHebergeur(hebergeurId: string, formData: FormData): Observable<HebergeurResponse> {
+    return this.http.put<HebergeurResponse>(
+      `${this.apiUrl}/${hebergeurId}`,
+      formData
+    ).pipe(
+      catchError((error) => this.handleError(error))
     );
   }
 
-  // Supprimer un hébergement
-  deleteHebergeur(hebergementId: string): Observable<void> {
-    const headers = this.getHeaders();
-    return this.http.delete<void>(`${this.apiUrl}/${hebergementId}`, { headers }).pipe(
-      catchError(this.handleError)
+  deleteHebergeur(hebergeurId: string): Observable<void> {
+    return this.http.delete<void>(
+      `${this.apiUrl}/${hebergeurId}`
+    ).pipe(
+      catchError((error) => this.handleError(error))
     );
   }
+
   getHebergeurById(id: string): Observable<HebergeurResponse> {
-    const headers = this.getHeaders(); // Inclure les en-têtes avec le token
-    return this.http.get<HebergeurResponse>(`${this.apiUrl}/${id}`, { headers });
+    return this.http.get<HebergeurResponse>(
+      `${this.apiUrl}/${id}`
+    ).pipe(
+      catchError((error) => this.handleError(error))
+    );
   }
 
   getAllHebergements(): Observable<HebergeurResponse[]> {
-    const token = localStorage.getItem('authToken');
-    const headers = token ? new HttpHeaders({ 'Authorization': `Bearer ${token}` }) : new HttpHeaders();
-    return this.http.get<HebergeurResponse[]>(this.apiUrl, { headers }).pipe(
-      catchError(this.handleError)
+    return this.http.get<HebergeurResponse[]>(
+      this.apiUrl
+    ).pipe(
+      catchError((error) => this.handleError(error))
     );
   }
 
-  resetHebergementFields(hebergementId: string): Observable<void> {
-    const headers = this.getHeaders();
-    return this.http.delete<void>(`${this.apiUrl}/${hebergementId}/reset-hebergement`, { headers }).pipe(
-      catchError(this.handleError)
+  resetHebergementFields(hebergeurId: string): Observable<void> {
+    return this.http.delete<void>(
+      `${this.apiUrl}/${hebergeurId}/reset-hebergement`
+    ).pipe(
+      catchError((error) => this.handleError(error))
     );
   }
 }

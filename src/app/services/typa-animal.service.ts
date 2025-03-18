@@ -11,30 +11,20 @@ export class TypaAnimalService {
 
   constructor(private http: HttpClient) { }
 
-  private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('authToken'); // Récupérez le token du localStorage
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}` // Ajoutez le token dans l'en-tête
-    });
-  }
 
   getAllTypeAnimals(): Observable<TypeAnimal[]> {
-    const headers = this.getHeaders(); // Ajoutez les headers d'authentification
-    return this.http.get<TypeAnimal[]>(this.apiUrl, { headers });
+    return this.http.get<TypeAnimal[]>(this.apiUrl);
   }
 
   createTypeAnimal(typeAnimal: TypeAnimal): Observable<TypeAnimal> {
-    const headers = this.getHeaders();
-    return this.http.post<TypeAnimal>(this.apiUrl, typeAnimal, { headers });
+    return this.http.post<TypeAnimal>(this.apiUrl, typeAnimal);
   }
 
   updateTypeAnimal(id: string, typeAnimal: TypeAnimal): Observable<TypeAnimal> {
-    const headers = this.getHeaders();
-    return this.http.put<TypeAnimal>(`${this.apiUrl}/${id}`, typeAnimal, { headers });
+    return this.http.put<TypeAnimal>(`${this.apiUrl}/${id}`, typeAnimal);
   }
 
   deleteTypeAnimal(id: string): Observable<void> {
-    const headers = this.getHeaders();
-    return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers });
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

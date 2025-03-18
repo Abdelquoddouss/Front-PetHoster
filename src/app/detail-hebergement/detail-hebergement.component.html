@@ -113,13 +113,35 @@
             </div>
 
 
-            <!-- Bouton réservation -->
-            <button class="w-full bg-green-400 hover:bg-green-500 text-white font-bold py-4 px-6 rounded-xl shadow-lg flex items-center justify-center gap-2 transition transform hover:scale-105 duration-300">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-              </svg>
+            <!-- Bouton de réservation -->
+            <button (click)="openReservationModal()" class="w-full bg-green-400 hover:bg-green-500 text-white font-bold py-4 px-6 rounded-xl shadow-lg flex items-center justify-center gap-2 transition transform hover:scale-105 duration-300">
               Réserver maintenant
             </button>
+
+            <!-- Modal de réservation -->
+            <div *ngIf="isReservationModalOpen" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+              <div class="bg-white rounded-lg p-6 w-full max-w-md">
+                <h2 class="text-xl font-bold mb-4">Réserver cet hébergement</h2>
+                <form (ngSubmit)="submitReservation()">
+                  <div class="mb-4">
+                    <label class="block text-gray-700">Date de début</label>
+                    <input type="date" [(ngModel)]="reservationRequest.dateDebut" name="dateDebut" class="w-full p-2 border rounded">
+                  </div>
+                  <div class="mb-4">
+                    <label class="block text-gray-700">Date de fin</label>
+                    <input type="date" [(ngModel)]="reservationRequest.dateFin" name="dateFin" class="w-full p-2 border rounded">
+                  </div>
+                  <div class="mb-4">
+                    <label class="block text-gray-700">Nombre d'animaux</label>
+                    <input type="number" [(ngModel)]="reservationRequest.nombreAnimaux" name="nombreAnimaux" class="w-full p-2 border rounded">
+                  </div>
+                  <div class="flex justify-end">
+                    <button type="button" (click)="closeReservationModal()" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Annuler</button>
+                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Réserver</button>
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </div>
