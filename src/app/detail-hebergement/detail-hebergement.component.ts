@@ -13,13 +13,13 @@ import {CommonModule} from "@angular/common";
 })
 export class DetailHebergementComponent implements OnInit {
   hebergement: HebergeurResponse | null = null;
+  currentMainImageIndex: number = 0;
 
   constructor(
     private route: ActivatedRoute,
     private hebergeurService: HebergeurService,
     private router: Router
   ) {}
-
 
   ngOnInit(): void {
     // Récupérer l'ID de l'hébergement depuis l'URL
@@ -41,5 +41,22 @@ export class DetailHebergementComponent implements OnInit {
         }
       }
     });
+  }
+
+  // Fonction pour changer l'image principale
+  changeMainImage(index: number): void {
+    if (this.hebergement && this.hebergement.photosHebergement.length > index) {
+      // Sauvegarde temporaire de l'image principale actuelle
+      const tempMainImage = this.hebergement.photosHebergement[0];
+
+      // Remplace l'image principale par celle cliquée
+      this.hebergement.photosHebergement[0] = this.hebergement.photosHebergement[index];
+
+      // Remplace l'image cliquée par l'ancienne image principale
+      this.hebergement.photosHebergement[index] = tempMainImage;
+
+      // Mise à jour de l'index courant
+      this.currentMainImageIndex = index;
+    }
   }
 }
