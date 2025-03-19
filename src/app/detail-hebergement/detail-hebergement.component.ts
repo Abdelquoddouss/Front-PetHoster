@@ -83,7 +83,8 @@ export class DetailHebergementComponent implements OnInit {
     this.reservationService.createReservation(this.reservationRequest).subscribe({
       next: (response) => {
         console.log('Réservation créée avec succès', response);
-        this.reservationSubmitted = true; // Activer l'affichage du message de succès
+        this.closeReservationModal();
+        alert('Votre réservation a été soumise avec succès. Veuillez attendre l\'acceptation de l\'hébergeur.'); // Message d'attente
       },
       error: (error) => {
         console.error('Erreur lors de la création de la réservation', error);
