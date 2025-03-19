@@ -15,6 +15,7 @@ import {CrudHebergementComponent} from "./Crud/crud-hebergement/crud-hebergement
 import {FormHebergementComponent} from "./form-hebergement/form-hebergement.component";
 import {DashboardAdminComponent} from "./dashboard-admin/dashboard-admin.component";
 import {DetailHebergementComponent} from "./detail-hebergement/detail-hebergement.component";
+import {GestionReservationComponent} from "./gestion-reservation/gestion-reservation.component";
 
 export const routes: Routes = [
   { path: 'footer', component: FooterComponent },
@@ -46,6 +47,8 @@ export const routes: Routes = [
     children: [
       { path: 'crud-herbergement', component: CrudHebergementComponent },
       { path: 'form-herbergement', component: FormHebergementComponent },
+      { path: 'gestion-reservation', component: GestionReservationComponent },
+
     ],
   },
 ];
