@@ -16,6 +16,7 @@ import {FormHebergementComponent} from "./form-hebergement/form-hebergement.comp
 import {DashboardAdminComponent} from "./dashboard-admin/dashboard-admin.component";
 import {DetailHebergementComponent} from "./detail-hebergement/detail-hebergement.component";
 import {GestionReservationComponent} from "./gestion-reservation/gestion-reservation.component";
+import {GestionProprietaireComponent} from "./gestion-proprietaire/gestion-proprietaire.component";
 
 export const routes: Routes = [
   { path: 'footer', component: FooterComponent },
@@ -39,6 +40,9 @@ export const routes: Routes = [
       { path: 'home', component: HomeComponent },
       { path: 'heb', component: HebergementComponent },
       { path: 'detail-hebergement/:id', component: DetailHebergementComponent },
+      { path: 'reservation-prprietaire', component: GestionProprietaireComponent },
+
+
     ],
   },
   {
