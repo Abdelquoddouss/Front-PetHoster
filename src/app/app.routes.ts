@@ -10,7 +10,6 @@ import {HebergementComponent} from "./hebergement/hebergement.component";
 import {SidebarComponent} from "./dashboard-hebergeur/sidebar/sidebar.component";
 import {CrudUserComponent} from "./Crud/crud-user/crud-user.component";
 import {CrudTypeAnimalComponent} from "./Crud/crud-type-animal/crud-type-animal.component";
-import {CrudAnimalComponent} from "./Crud/crud-animal/crud-animal.component";
 import {CrudHebergementComponent} from "./Crud/crud-hebergement/crud-hebergement.component";
 import {FormHebergementComponent} from "./form-hebergement/form-hebergement.component";
 import {DashboardAdminComponent} from "./dashboard-admin/dashboard-admin.component";
@@ -24,7 +23,7 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'heros', component: HerosComponent },
-  { path: 'crud-animal', component: CrudAnimalComponent },
+
   {
     path: 'dashboard-admin',
     component: DashboardAdminComponent,

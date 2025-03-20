@@ -4,6 +4,7 @@ import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
 import {CommonModule} from "@angular/common";
 import {jwtDecode} from "jwt-decode";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-login',
@@ -50,7 +51,7 @@ export class LoginComponent {
         },
         error: (err) => {
           console.error('Login failed', err);
-          alert('Email ou mot de passe incorrect.');
+          Swal.fire('Erreur', 'Email ou mot de passe incorrect.. Veuillez réessayer.', 'error');
         }
       });
     }

@@ -3,6 +3,7 @@ import {ReservationService} from "../services/reservation.service";
 import {AuthService} from "../services/auth.service";
 import {Router} from "@angular/router";
 import {CommonModule, NgClass} from "@angular/common";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-gestion-reservation',
@@ -51,21 +52,23 @@ export class GestionReservationComponent implements OnInit {
     }
   }
   confirmerReservation(reservationId: string): void {
-    const confirmationRequest = { confirmer: true }; // Demande de confirmation
+    const confirmationRequest = { confirmer: true };
     this.reservationService.confirmerReservation(reservationId, confirmationRequest).subscribe({
       next: (response) => {
         console.log('Réservation confirmée avec succès', response);
-        this.loadReservations(); // Recharger les réservations après confirmation
+        this.loadReservations();
+        Swal.fire('Succès!', 'Réservation confirmée avec succès', 'success');
       },
       error: (error) => {
         console.error('Erreur lors de la confirmation de la réservation', error);
+        Swal.fire('Erreur', 'Erreur lors de la confirmation de la réservation', 'error');
       }
     });
   }
 
   annulerReservation(reservationId: string): void {
-    const userId = this.authService.getCurrentUserId(); // Récupérer l'ID de l'utilisateur
-    const userRole = this.authService.getCurrentUserRole(); // Récupérer le rôle de l'utilisateur
+    const userId = this.authService.getCurrentUserId();
+    const userRole = this.authService.getCurrentUserRole();
 
     if (!userId || !userRole) {
       console.error('ID utilisateur ou rôle non trouvé.');
@@ -74,10 +77,12 @@ export class GestionReservationComponent implements OnInit {
 
     this.reservationService.annulerReservation(reservationId, userId, userRole).subscribe({
       next: () => {
-        this.loadReservations(); // Recharger les réservations après annulation
+        this.loadReservations();
+        Swal.fire('Succès!', 'Réservation annulée avec succès', 'success');
       },
       error: (err) => {
         console.error('Erreur lors de l\'annulation de la réservation', err);
+        Swal.fire('Erreur', 'Erreur lors de l\'annulation de la réservation', 'error');
       }
     });
   }

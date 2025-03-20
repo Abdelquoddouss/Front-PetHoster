@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 import {Utilisateur} from "../../interface/utilisateur";
 import {UtilisateurService} from "../../services/utilisateur.service";
 import {CommonModule} from "@angular/common";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-crud-user',
@@ -43,20 +44,29 @@ export class CrudUserComponent implements OnInit {
   }
 
   deleteUser(id: string): void {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
-      this.utilisateurService.deleteUser(id).subscribe({
-        next: () => {
-          this.utilisateurs = this.utilisateurs.filter(u => u.id !== id);
-          alert('Utilisateur supprimé avec succès');
-        },
-        error: (err) => {
-          console.error('Erreur de suppression:', err);
-          if (err.status === 403) {
-            alert('Accès refusé. Veuillez vous reconnecter.');
-            this.router.navigate(['/login']); // Redirigez vers la page de connexion en cas d'erreur 403
+    Swal.fire({
+      title: 'Êtes-vous sûr ?',
+      text: 'Voulez-vous vraiment supprimer cet utilisateur ?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Oui, supprimer !'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.utilisateurService.deleteUser(id).subscribe({
+          next: () => {
+            this.utilisateurs = this.utilisateurs.filter(u => u.id !== id);
+            Swal.fire('Succès!', 'Utilisateur supprimé avec succès', 'success');
+          },
+          error: (err) => {
+            console.error('Erreur de suppression:', err);
+            Swal.fire('Erreur', 'Accès refusé. Veuillez vous reconnecter.', 'error');
+            this.router.navigate(['/login']);
           }
-        }
-      });
-    }
+        });
+      }
+    });
+
   }
 }

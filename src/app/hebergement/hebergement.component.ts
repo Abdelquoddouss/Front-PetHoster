@@ -6,6 +6,7 @@ import { UtilisateurService } from "../services/utilisateur.service";
 import { CommonModule } from "@angular/common";
 import { HebergeurService } from "../services/hebergeur.service";
 import { HebergeurResponse } from "../interface/hebergeur-response";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-hebergement',
@@ -68,43 +69,45 @@ export class HebergementComponent implements OnInit {
   }
 
   devenirHebergeur(): void {
-    const confirmation = confirm("Êtes-vous sûr de vouloir devenir hébergeur ? Cette action est irréversible.");
+    Swal.fire({
+      title: 'Êtes-vous sûr ?',
+      text: 'Voulez-vous vraiment devenir hébergeur ? Cette action est irréversible.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Oui, devenir hébergeur !'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (!this.authService.isLoggedIn()) {
+          console.error('Aucun utilisateur connecté trouvé');
+          this.router.navigate(['/login']);
+          return;
+        }
 
-    // Si l'utilisateur clique sur "Annuler", ne rien faire
-    if (!confirmation) {
-      return;
-    }
+        const userId = localStorage.getItem('userId');
 
-    // Vérifier si l'utilisateur est connecté
-    if (!this.authService.isLoggedIn()) {
-      console.error('Aucun utilisateur connecté trouvé');
-      this.router.navigate(['/login']);
-      return;
-    }
+        if (!userId) {
+          console.error('Aucun utilisateur connecté trouvé');
+          this.router.navigate(['/login']);
+          return;
+        }
 
-    const userId = localStorage.getItem('userId');
+        const newRole = 'HEBERGEUR';
 
-    if (!userId) {
-      console.error('Aucun utilisateur connecté trouvé');
-      this.router.navigate(['/login']); // Rediriger vers la page de connexion
-      return;
-    }
-
-    const newRole = 'HEBERGEUR'; // Nouveau rôle
-
-    // Appeler la méthode updateUserRole du service UtilisateurService
-    this.utilisateurService.updateUserRole(userId, newRole).subscribe(
-      (response) => {
-        console.log('Rôle mis à jour avec succès', response);
-        this.userRole = newRole; // Mettre à jour le rôle localement
-        // Rediriger vers le tableau de bord des hébergeurs
-        this.router.navigate(['/dashboard-hebergeur']);
-      },
-      (error) => {
-        console.error('Erreur lors de la mise à jour du rôle', error);
-        // Afficher un message d'erreur à l'utilisateur
-        alert('Une erreur est survenue lors de la mise à jour du rôle. Veuillez réessayer.');
+        this.utilisateurService.updateUserRole(userId, newRole).subscribe(
+          (response) => {
+            console.log('Rôle mis à jour avec succès', response);
+            this.userRole = newRole;
+            Swal.fire('Succès!', 'Vous êtes maintenant hébergeur', 'success');
+            this.router.navigate(['/dashboard-hebergeur']);
+          },
+          (error) => {
+            console.error('Erreur lors de la mise à jour du rôle', error);
+            Swal.fire('Erreur', 'Une erreur est survenue lors de la mise à jour du rôle. Veuillez réessayer.', 'error');
+          }
+        );
       }
-    );
+    });
   }
 }
