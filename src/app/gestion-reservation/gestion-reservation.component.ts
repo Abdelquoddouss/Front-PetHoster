@@ -86,4 +86,20 @@ export class GestionReservationComponent implements OnInit {
       }
     });
   }
+
+  // Méthodes à ajouter au composant
+  calculateDuration(dateDebut: string, dateFin: string): number {
+    const start = new Date(dateDebut);
+    const end = new Date(dateFin);
+    const diffTime = Math.abs(end.getTime() - start.getTime());
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  }
+
+  getInitials(nom: string, prenom: string): string {
+    return (nom.charAt(0) + prenom.charAt(0)).toUpperCase();
+  }
+
+  getCurrentDate(): Date {
+    return new Date();
+  }
 }
