@@ -61,12 +61,10 @@ export class CrudUserComponent implements OnInit {
           },
           error: (err) => {
             console.error('Erreur de suppression:', err);
-            Swal.fire('Erreur', 'Accès refusé. Veuillez vous reconnecter.', 'error');
-            this.router.navigate(['/login']);
+            Swal.fire('Erreur', 'Une erreur est survenue lors de la suppression de l\'utilisateur.', 'error');
           }
         });
       }
     });
-
   }
 }
