@@ -20,9 +20,9 @@ import Swal from "sweetalert2";
   styleUrl: './hebergement.component.css'
 })
 export class HebergementComponent implements OnInit {
-  userRole: string | null = null; // Pour stocker le rôle de l'utilisateur
-  hebergements: HebergeurResponse[] = []; // Déclarez la variable pour stocker les hébergements
-
+  userRole: string | null = null;
+  hebergements: HebergeurResponse[] = [];
+  isAuthenticated: boolean = false;
   constructor(
     private authService: AuthService,
     private utilisateurService: UtilisateurService,
@@ -31,6 +31,7 @@ export class HebergementComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.isAuthenticated = this.authService.isLoggedIn(); // Vérifiez si l'utilisateur est authentifié
     this.checkUserRole();
     this.loadHebergements();
   }
@@ -62,7 +63,7 @@ export class HebergementComponent implements OnInit {
         },
         (error) => {
           console.error('Erreur lors de la récupération du rôle', error);
-          alert('Une erreur est survenue lors de la récupération du rôle. Veuillez réessayer.');
+          Swal.fire('Erreur', 'Une erreur est survenue lors de la récupération du rôle. Veuillez réessayer.', 'error');
         }
       );
     }
