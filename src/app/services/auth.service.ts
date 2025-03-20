@@ -52,4 +52,12 @@ export class AuthService {
     return localStorage.getItem('userId');
   }
 
+  getCurrentUserRole(): string {
+    const token = this.getToken();
+    if (token) {
+      const decodedToken: any = jwtDecode(token);
+      return decodedToken.role; // Assurez-vous que le rôle est bien stocké dans le token JWT
+    }
+    return ''; // Retourne une chaîne vide si le token n'est pas trouvé
+  }
 }

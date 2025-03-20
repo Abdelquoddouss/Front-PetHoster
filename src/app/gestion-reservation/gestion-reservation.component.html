@@ -5,27 +5,25 @@
     <!-- Liste des réservations sous forme de cartes -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       <!-- Carte pour chaque réservation -->
-      <div *ngFor="let reservation of reservations"
-           class="bg-white shadow-md rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-102 border border-gray-100">
-
+      <div *ngFor="let reservation of reservations" class="bg-white shadow-md rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-102 border border-gray-100">
         <!-- Bannière avec le statut -->
         <div [ngClass]="{
-          'bg-yellow-500': reservation.statut === 'EN_ATTENTE',
-          'bg-green-500': reservation.statut === 'CONFIRMEE',
-          'bg-red-500': reservation.statut === 'ANNULEE'
-        }" class="h-2 w-full"></div>
+    'bg-yellow-500': reservation.statut === 'EN_ATTENTE',
+    'bg-green-500': reservation.statut === 'CONFIRMEE',
+    'bg-red-500': reservation.statut === 'ANNULEE'
+  }" class="h-2 w-full"></div>
 
         <div class="p-6">
           <!-- En-tête avec statut -->
           <div class="flex justify-between items-center mb-5">
             <h2 class="text-xl font-bold text-gray-800">Réservation #{{ reservation.id.substring(0, 8) }}</h2>
             <span [ngClass]="{
-              'bg-yellow-100 text-yellow-800 border border-yellow-200': reservation.statut === 'EN_ATTENTE',
-              'bg-green-100 text-green-800 border border-green-200': reservation.statut === 'CONFIRMEE',
-              'bg-red-100 text-red-800 border border-red-200': reservation.statut === 'ANNULEE'
-            }" class="px-3 py-1 rounded-full text-xs font-semibold">
-              {{ reservation.statut }}
-            </span>
+        'bg-yellow-100 text-yellow-800 border border-yellow-200': reservation.statut === 'EN_ATTENTE',
+        'bg-green-100 text-green-800 border border-green-200': reservation.statut === 'CONFIRMEE',
+        'bg-red-100 text-red-800 border border-red-200': reservation.statut === 'ANNULEE'
+      }" class="px-3 py-1 rounded-full text-xs font-semibold">
+        {{ reservation.statut }}
+      </span>
           </div>
 
           <!-- Détails de la réservation -->
@@ -78,7 +76,7 @@
           </div>
 
           <!-- Actions (Confirmer/Annuler) -->
-          <div *ngIf="reservation.statut === 'EN_ATTENTE'" class="flex space-x-3 mt-4">
+          <div *ngIf="reservation.statut === 'EN_ATTENTE' && userRole === 'HEBERGEUR'" class="flex space-x-3 mt-4">
             <button
               (click)="confirmerReservation(reservation.id)"
               class="flex-1 bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-200 flex items-center justify-center"
@@ -90,7 +88,7 @@
             </button>
             <button
               (click)="annulerReservation(reservation.id)"
-              class="flex-1 bg-white border border-red-500 text-red-500 py-2 px-4 rounded-lg hover:bg-red-50 transition duration-200 flex items-center justify-center"
+              class="flex-1 bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition duration-200 flex items-center justify-center"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />

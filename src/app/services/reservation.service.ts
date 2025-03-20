@@ -17,8 +17,13 @@ export class ReservationService {
     return this.http.post<any>(this.apiUrl, reservationRequest);
   }
 
-  annulerReservation(id: string): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}/annuler`, {});
+  annulerReservation(id: string, userId: string, userRole: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'userId': userId,
+      'userRole': userRole
+    });
+
+    return this.http.put<any>(`${this.apiUrl}/${id}/annuler`, {}, { headers });
   }
 
   confirmerReservation(id: string, confirmationRequest: any): Observable<any> {

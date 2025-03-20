@@ -16,6 +16,7 @@ import {CommonModule, NgClass} from "@angular/common";
 export class GestionReservationComponent implements OnInit {
   reservations: any[] = []; // Liste des réservations
   hebergeurId: string | null = null; // ID de l'hébergeur connecté
+  userRole: string = '';
 
   constructor(
     private reservationService: ReservationService,
@@ -25,14 +26,16 @@ export class GestionReservationComponent implements OnInit {
 
   ngOnInit(): void {
     this.hebergeurId = localStorage.getItem('userId');
-    console.log('Hebergeur ID:', this.hebergeurId); // Ajoutez ce log pour vérifier l'ID
+    this.userRole = this.authService.getCurrentUserRole(); // Récupérer le rôle de l'utilisateur
+    console.log('Hebergeur ID:', this.hebergeurId);
+    console.log('User Role:', this.userRole); // Ajoutez ce log pour vérifier le rôle
+
     if (this.hebergeurId) {
       this.loadReservations();
     } else {
       this.router.navigate(['/login']);
     }
   }
-
   loadReservations(): void {
     if (this.hebergeurId) {
       this.reservationService.getReservationsByHebergeur(this.hebergeurId).subscribe({
@@ -61,13 +64,20 @@ export class GestionReservationComponent implements OnInit {
   }
 
   annulerReservation(reservationId: string): void {
-    this.reservationService.annulerReservation(reservationId).subscribe({
-      next: (response) => {
-        console.log('Réservation annulée avec succès', response);
+    const userId = this.authService.getCurrentUserId(); // Récupérer l'ID de l'utilisateur
+    const userRole = this.authService.getCurrentUserRole(); // Récupérer le rôle de l'utilisateur
+
+    if (!userId || !userRole) {
+      console.error('ID utilisateur ou rôle non trouvé.');
+      return;
+    }
+
+    this.reservationService.annulerReservation(reservationId, userId, userRole).subscribe({
+      next: () => {
         this.loadReservations(); // Recharger les réservations après annulation
       },
-      error: (error) => {
-        console.error('Erreur lors de l\'annulation de la réservation', error);
+      error: (err) => {
+        console.error('Erreur lors de l\'annulation de la réservation', err);
       }
     });
   }
