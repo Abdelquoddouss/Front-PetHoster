@@ -1,162 +1,258 @@
-<div class="bg-gradient-to-b from-blue-50 to-green-50 min-h-screen py-0">
-  <div class="container mx-auto px-0 w-full max-w-none">
+<div class="bg-gradient-to-b from-blue-50 to-green-50 min-h-screen py-8">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
     <!-- Loader -->
     <div *ngIf="!hebergement" class="flex flex-col items-center justify-center p-12 min-h-screen">
-      <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-400 mb-4"></div>
-      <p class="text-lg text-gray-700">Chargement des détails de l'hébergement...</p>
+      <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-green-500 mb-6"></div>
+      <p class="text-xl text-gray-700 font-medium">Chargement des détails de l'hébergement...</p>
     </div>
 
     <!-- Contenu principal -->
-    <div *ngIf="hebergement" class="bg-white overflow-hidden">
+    <div *ngIf="hebergement" class="bg-white rounded-2xl shadow-xl overflow-hidden">
       <!-- En-tête avec nom et prix -->
-      <div class="bg-gradient-to-r m-9 from-green-300 to-green-200 text-gray-800 p-24 flex flex-col md:flex-row md:justify-between md:items-center">
-        <div>
-          <h1 class="text-3xl font-bold">{{ hebergement.nom }} {{ hebergement.prenom }}</h1>
+      <div class="relative overflow-hidden">
+        <!-- Image de fond -->
+        <div class="absolute inset-0 overflow-hidden">
+          <img [src]="'http://localhost:8081' + hebergement.photosHebergement[0]"
+               class="w-full h-full object-cover filter blur-sm opacity-25"
+               alt="Background image">
         </div>
-        <div class="md:mt-0 py-4 px-6 bg-white text-green-600 rounded-xl shadow-md transform translate-y-4 md:translate-y-0">
-          <span class="text-3xl font-bold">{{ hebergement.tarifParJour }} DH</span>
-          <span class="text-xl text-green-500">/jour</span>
+
+        <!-- Contenu de l'en-tête -->
+        <div class="relative bg-gradient-to-r from-green-400/90 to-blue-400/80 text-white p-8 sm:p-12 md:p-16">
+          <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-6">
+            <div class="space-y-2">
+              <div class="flex items-center space-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                </svg>
+                <span class="text-lg font-medium text-yellow-100">Hébergeur de confiance</span>
+              </div>
+              <h1 class="text-4xl font-bold">{{ hebergement.nom }} {{ hebergement.prenom }}</h1>
+              <div class="flex items-center text-white/90 text-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                {{ hebergement.adresse }}
+              </div>
+            </div>
+            <div class="bg-white text-green-600 rounded-xl shadow-lg p-6 transform md:translate-y-0 flex flex-col items-center">
+              <div class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Tarif journalier</div>
+              <div class="flex items-baseline">
+                <span class="text-4xl font-extrabold">{{ hebergement.tarifParJour }}</span>
+                <span class="text-2xl font-bold text-green-500 ml-1">DH</span>
+              </div>
+              <span class="text-sm text-gray-500 mt-1">par jour</span>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- Contenu principal -->
-      <div class="p-6 md:p-10 mt-8 md:mt-0">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-          <!-- Section des images -->
-          <div class="space-y-6">
+      <div class="p-6 md:p-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+          <!-- Section des images - 7 colonnes sur grand écran -->
+          <div class="lg:col-span-7 space-y-6">
             <!-- Image principale -->
-            <div class="relative rounded-xl overflow-hidden shadow-lg bg-gray-100 aspect-[8/4]">
+            <div class="relative rounded-2xl overflow-hidden shadow-lg bg-gray-100 aspect-[4/3]">
               <img [src]="'http://localhost:8081' + hebergement.photosHebergement[0]"
                    [alt]="'Photo de ' + hebergement.nom"
-                   class="w-full h-full object-cover brightness-105 contrast-105"
+                   class="w-full h-full object-cover"
                    id="mainImage">
-
-              <!-- Overlay pour donner un effet plus clair -->
-              <div class="absolute inset-0 bg-white opacity-10"></div>
             </div>
+
             <!-- Galerie d'images -->
             <div class="grid grid-cols-4 gap-4">
               <div *ngFor="let photo of hebergement.photosHebergement.slice(1); let i = index"
-                   class="aspect-square rounded-lg overflow-hidden cursor-pointer shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+                   class="aspect-square rounded-xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl border-2 border-transparent hover:border-green-400 transition-all duration-300"
                    (click)="changeMainImage(i + 1)">
                 <img [src]="'http://localhost:8081' + photo"
                      alt="Aperçu hébergement"
-                     class="w-full h-full object-cover brightness-105 contrast-105">
-
-                <!-- Overlay pour donner un effet plus clair -->
-                <div class="absolute inset-0 bg-white opacity-10"></div>
+                     class="w-full h-full object-cover">
               </div>
+            </div>
+
+            <!-- Description complète -->
+            <div class="bg-gray-50 rounded-2xl p-6 shadow-sm border border-gray-100 mt-8">
+              <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                À propos de cet hébergement
+              </h2>
+              <p class="text-gray-700 leading-relaxed">{{ hebergement.descriptionService }}</p>
             </div>
           </div>
 
-          <!-- Section des informations -->
-          <div class="bg-blue-50 rounded-xl p-6 shadow-sm border border-blue-100 space-y-6">
-            <!-- Description -->
-            <div class="space-y-3">
-              <h2 class="text-xl font-semibold text-gray-800 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Description
-              </h2>
-              <p class="text-gray-700 leading-relaxed pl-8">{{ hebergement.descriptionService }}</p>
-            </div>
+          <!-- Section des informations et réservation - 5 colonnes sur grand écran -->
+          <div class="lg:col-span-5 space-y-8">
+            <!-- Carte d'information -->
+            <div class="bg-white rounded-2xl p-6 shadow-xl border border-gray-100">
+              <h2 class="text-2xl font-bold text-gray-800 mb-6">Informations de contact</h2>
 
-            <!-- Adresse -->
-            <div class="space-y-3">
-              <h2 class="text-xl font-semibold text-gray-800 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                Adresse
-              </h2>
-              <p class="text-gray-700 leading-relaxed pl-8">{{ hebergement.adresse }}</p>
-            </div>
-
-            <!-- Téléphone -->
-            <div class="space-y-3">
-              <h2 class="text-xl font-semibold text-gray-800 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-                Téléphone
-              </h2>
-              <p class="text-gray-700 leading-relaxed pl-8">{{ hebergement.telephone }}</p>
-            </div>
-
-            <!-- Email -->
-            <div class="space-y-3">
-              <h2 class="text-xl font-semibold text-gray-800 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                Email
-              </h2>
-              <p class="text-gray-700 leading-relaxed pl-8">{{ hebergement.email }}</p>
-            </div>
-            <!-- Types d'animaux acceptés -->
-            <div class="bg-green-50 rounded-xl p-6 shadow-sm border border-green-100">
-              <h2 class="text-xl font-semibold text-gray-800 mb-3 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                </svg>
-                Animaux acceptés
-              </h2>
-              <div class="flex flex-wrap gap-2 mt-3">
-                <span *ngFor="let type of hebergement.typeAnimauxAcceptesNoms"
-                      class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
-                  {{ type }}
-                </span>
-              </div>
-            </div>
-
-
-            <!-- Bouton de réservation -->
-            <button (click)="openReservationModal()" class="w-full bg-green-400 hover:bg-green-500 text-white font-bold py-4 px-6 rounded-xl shadow-lg flex items-center justify-center gap-2 transition transform hover:scale-105 duration-300">
-              Réserver maintenant
-            </button>
-
-
-            <!-- Modal de réservation -->
-            <div *ngIf="isReservationModalOpen" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-              <div class="bg-white rounded-lg p-6 w-full max-w-md">
-                <h2 class="text-xl font-bold mb-4">Réserver cet hébergement</h2>
-                <form (ngSubmit)="submitReservation()">
-                  <div class="mb-4">
-                    <label class="block text-gray-700">Date de début</label>
-                    <input type="date" [(ngModel)]="reservationRequest.dateDebut" name="dateDebut" class="w-full p-2 border rounded">
-                  </div>
-                  <div class="mb-4">
-                    <label class="block text-gray-700">Date de fin</label>
-                    <input type="date" [(ngModel)]="reservationRequest.dateFin" name="dateFin" class="w-full p-2 border rounded">
-                  </div>
-                  <div class="mb-4">
-                    <label class="block text-gray-700">Nombre d'animaux</label>
-                    <input type="number" [(ngModel)]="reservationRequest.nombreAnimaux" name="nombreAnimaux" class="w-full p-2 border rounded">
-                  </div>
-                  <div class="flex justify-end">
-                    <button type="button" (click)="closeReservationModal()" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Annuler</button>
-                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Réserver</button>
-                  </div>
-                </form>
-                <div *ngIf="reservationSubmitted" class="text-center">
-                  <p class="text-green-600 font-bold">Votre réservation a été soumise avec succès.</p>
-                  <p class="text-gray-700 mt-2">Veuillez attendre l'acceptation de l'hébergeur.</p>
-                  <button
-                    (click)="closeReservationModal()"
-                    class="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-                  >
-                    Fermer
-                  </button>
+              <!-- Téléphone -->
+              <div class="flex items-start mb-6 p-4 bg-gray-50 rounded-xl">
+                <div class="bg-green-100 p-3 rounded-full mr-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-800">Téléphone</h3>
+                  <p class="text-gray-700">{{ hebergement.telephone }}</p>
                 </div>
               </div>
+
+              <!-- Email -->
+              <div class="flex items-start mb-6 p-4 bg-gray-50 rounded-xl">
+                <div class="bg-blue-100 p-3 rounded-full mr-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-800">Email</h3>
+                  <p class="text-gray-700">{{ hebergement.email }}</p>
+                </div>
+              </div>
+
+              <!-- Types d'animaux acceptés -->
+              <div class="p-4 bg-green-50 rounded-xl">
+                <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                  Animaux acceptés
+                </h3>
+                <div class="flex flex-wrap gap-2 mt-2">
+                  <span *ngFor="let type of hebergement.typeAnimauxAcceptesNoms"
+                        class="px-4 py-2 bg-green-200 text-green-800 rounded-full text-sm font-medium flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    {{ type }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Carte de réservation -->
+            <div class="bg-white rounded-2xl p-6 shadow-xl border border-gray-100">
+              <h2 class="text-2xl font-bold text-gray-800 mb-4">Réserver votre séjour</h2>
+
+              <div class="mb-6 p-4 bg-blue-50 rounded-xl">
+                <div class="flex items-center text-blue-800 mb-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span class="font-medium">Tarif journalier</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-gray-700">Prix par jour</span>
+                  <span class="font-bold text-gray-900">{{ hebergement.tarifParJour }} DH</span>
+                </div>
+              </div>
+
+              <button (click)="openReservationModal()" class="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-105">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                Réserver maintenant
+              </button>
             </div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
 
+<!-- Modal de réservation -->
+<div *ngIf="isReservationModalOpen" class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+  <div class="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl transform transition-all duration-300 scale-100">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold text-gray-800">Réserver votre séjour</h2>
+      <button (click)="closeReservationModal()" class="text-gray-500 hover:text-gray-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Formulaire de réservation -->
+    <div *ngIf="!reservationSubmitted">
+      <form (ngSubmit)="submitReservation()" class="space-y-5">
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Date de début</label>
+          <div class="relative">
+            <input type="date" [(ngModel)]="reservationRequest.dateDebut" name="dateDebut"
+                   class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Date de fin</label>
+          <div class="relative">
+            <input type="date" [(ngModel)]="reservationRequest.dateFin" name="dateFin"
+                   class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Nombre d'animaux</label>
+          <div class="relative">
+            <input type="number" [(ngModel)]="reservationRequest.nombreAnimaux" name="nombreAnimaux" min="1"
+                   class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-3 mt-6">
+          <button type="button" (click)="closeReservationModal()"
+                  class="px-5 py-3 bg-gray-200 text-gray-800 font-medium rounded-lg hover:bg-gray-300 transition-colors">
+            Annuler
+          </button>
+          <button type="submit"
+                  class="px-5 py-3 bg-green-500 text-white font-medium rounded-lg hover:bg-green-600 transition-colors flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Confirmer la réservation
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Message de confirmation -->
+    <div *ngIf="reservationSubmitted" class="text-center py-6">
+      <div class="inline-block p-4 bg-green-100 rounded-full mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <h3 class="text-2xl font-bold text-gray-800 mb-2">Réservation soumise !</h3>
+      <p class="text-gray-600 mb-6">Votre demande de réservation a été envoyée avec succès. Veuillez attendre l'acceptation de l'hébergeur.</p>
+      <button
+        (click)="closeReservationModal()"
+        class="px-6 py-3 bg-green-500 text-white font-medium rounded-lg hover:bg-green-600 transition-colors"
+      >
+        Fermer
+      </button>
     </div>
   </div>
 </div>

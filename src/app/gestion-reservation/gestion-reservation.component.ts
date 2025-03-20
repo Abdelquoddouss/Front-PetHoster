@@ -15,8 +15,8 @@ import Swal from "sweetalert2";
   styleUrl: './gestion-reservation.component.css'
 })
 export class GestionReservationComponent implements OnInit {
-  reservations: any[] = []; // Liste des réservations
-  hebergeurId: string | null = null; // ID de l'hébergeur connecté
+  reservations: any[] = [];
+  hebergeurId: string | null = null;
   userRole: string = '';
 
   constructor(
@@ -27,9 +27,9 @@ export class GestionReservationComponent implements OnInit {
 
   ngOnInit(): void {
     this.hebergeurId = localStorage.getItem('userId');
-    this.userRole = this.authService.getCurrentUserRole(); // Récupérer le rôle de l'utilisateur
+    this.userRole = this.authService.getCurrentUserRole();
     console.log('Hebergeur ID:', this.hebergeurId);
-    console.log('User Role:', this.userRole); // Ajoutez ce log pour vérifier le rôle
+    console.log('User Role:', this.userRole);
 
     if (this.hebergeurId) {
       this.loadReservations();
@@ -46,7 +46,7 @@ export class GestionReservationComponent implements OnInit {
         },
         error: (error) => {
           console.error('Erreur lors de la récupération des réservations', error);
-          console.log('Détails de l\'erreur:', error.error); // Affichez le contenu de l'erreur
+          console.log('Détails de l\'erreur:', error.error);
         }
       });
     }
@@ -102,4 +102,5 @@ export class GestionReservationComponent implements OnInit {
   getCurrentDate(): Date {
     return new Date();
   }
+
 }
