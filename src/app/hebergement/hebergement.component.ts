@@ -61,6 +61,8 @@ export class HebergementComponent implements OnInit {
   }
 
   loadSearchResults(searchRequest: HebergeurSearchRequest | null): void {
+    console.log('Search request being sent:', JSON.stringify(searchRequest)); // Add this line
+
     this.hebergeurService.searchHebergements(searchRequest).subscribe(
       (data: HebergeurResponse[]) => {
         this.hebergements = data.filter(hebergement =>
@@ -74,10 +76,11 @@ export class HebergementComponent implements OnInit {
         // Mettre à jour les variables de pagination
         this.totalItems = this.hebergements.length;
         this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
-        this.currentPage = 1; // Retour à la première page avec les nouveaux résultats
+        this.currentPage = 1;
       },
       (error) => {
         console.error('Erreur lors de la recherche des hébergements', error);
+        this.loadHebergements();
       }
     );
   }

@@ -113,6 +113,9 @@ export class HebergeurService {
   }
 
   searchHebergements(searchRequest: HebergeurSearchRequest | null): Observable<HebergeurResponse[]> {
-    return this.http.post<HebergeurResponse[]>(`${this.apiUrl}/search`, searchRequest);
+    return this.http.post<HebergeurResponse[]>(`${this.apiUrl}/search`, searchRequest)
+      .pipe(
+        catchError((error) => this.handleError(error))
+      );
   }
 }
