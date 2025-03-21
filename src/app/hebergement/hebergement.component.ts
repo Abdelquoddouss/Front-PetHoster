@@ -23,6 +23,12 @@ export class HebergementComponent implements OnInit {
   userRole: string | null = null;
   hebergements: HebergeurResponse[] = [];
   isAuthenticated: boolean = false;
+
+  currentPage: number = 1;
+  itemsPerPage: number = 3;
+  totalItems: number = 0;
+  totalPages: number = 0;
+
   constructor(
     private authService: AuthService,
     private utilisateurService: UtilisateurService,
@@ -47,11 +53,42 @@ export class HebergementComponent implements OnInit {
           hebergement.typeAnimauxAcceptesNoms !== undefined &&
           hebergement.photosHebergement !== undefined
         );
+
+        // Mettre à jour les variables de pagination
+        this.totalItems = this.hebergements.length;
+        this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
       },
       (error) => {
         console.error('Erreur lors de la récupération des hébergements', error);
       }
     );
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+    }
+  }
+
+  get paginatedHebergements(): HebergeurResponse[] {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return this.hebergements.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  get pages(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
   }
 
   checkUserRole(): void {
