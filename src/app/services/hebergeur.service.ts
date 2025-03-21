@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { HebergeurResponse } from '../interface/hebergeur-response';
+import {HebergeurSearchRequest} from "../interface/hebergeur-search-request";
 
 @Injectable({
   providedIn: 'root'
@@ -109,5 +110,9 @@ export class HebergeurService {
     ).pipe(
       catchError((error) => this.handleError(error))
     );
+  }
+
+  searchHebergements(searchRequest: HebergeurSearchRequest | null): Observable<HebergeurResponse[]> {
+    return this.http.post<HebergeurResponse[]>(`${this.apiUrl}/search`, searchRequest);
   }
 }

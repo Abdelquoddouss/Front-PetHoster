@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { HerosComponent } from "../heros/heros.component";
 import { AuthService } from "../services/auth.service";
-import { Router, RouterLink } from "@angular/router";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import { UtilisateurService } from "../services/utilisateur.service";
 import { CommonModule } from "@angular/common";
 import { HebergeurService } from "../services/hebergeur.service";
 import { HebergeurResponse } from "../interface/hebergeur-response";
 import Swal from "sweetalert2";
+import {HebergeurSearchRequest} from "../interface/hebergeur-search-request";
 
 @Component({
   selector: 'app-hebergement',
@@ -23,6 +24,7 @@ export class HebergementComponent implements OnInit {
   userRole: string | null = null;
   hebergements: HebergeurResponse[] = [];
   isAuthenticated: boolean = false;
+  searchParams: HebergeurSearchRequest | null = null;
 
   currentPage: number = 1;
   itemsPerPage: number = 3;
@@ -30,6 +32,8 @@ export class HebergementComponent implements OnInit {
   totalPages: number = 0;
 
   constructor(
+    private route: ActivatedRoute,
+
     private authService: AuthService,
     private utilisateurService: UtilisateurService,
     private router: Router,
@@ -37,9 +41,45 @@ export class HebergementComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.isAuthenticated = this.authService.isLoggedIn(); // Vérifiez si l'utilisateur est authentifié
+    this.isAuthenticated = this.authService.isLoggedIn();
     this.checkUserRole();
-    this.loadHebergements();
+
+    // Récupérer les paramètres de recherche depuis l'URL
+    this.route.queryParams.subscribe(params => {
+      if (params['search']) {
+        try {
+          this.searchParams = JSON.parse(params['search']);
+          this.loadSearchResults(this.searchParams);
+        } catch (e) {
+          console.error('Erreur lors de la récupération des paramètres de recherche', e);
+          this.loadHebergements(); // Chargement par défaut
+        }
+      } else {
+        this.loadHebergements(); // Chargement par défaut
+      }
+    });
+  }
+
+  loadSearchResults(searchRequest: HebergeurSearchRequest | null): void {
+    this.hebergeurService.searchHebergements(searchRequest).subscribe(
+      (data: HebergeurResponse[]) => {
+        this.hebergements = data.filter(hebergement =>
+          hebergement.tarifParJour !== undefined &&
+          hebergement.descriptionService !== undefined &&
+          hebergement.typeAnimauxAcceptesIds !== undefined &&
+          hebergement.typeAnimauxAcceptesNoms !== undefined &&
+          hebergement.photosHebergement !== undefined
+        );
+
+        // Mettre à jour les variables de pagination
+        this.totalItems = this.hebergements.length;
+        this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
+        this.currentPage = 1; // Retour à la première page avec les nouveaux résultats
+      },
+      (error) => {
+        console.error('Erreur lors de la recherche des hébergements', error);
+      }
+    );
   }
 
   loadHebergements(): void {

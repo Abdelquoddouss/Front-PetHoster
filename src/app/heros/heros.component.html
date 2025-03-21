@@ -15,42 +15,43 @@
 
 
     <!-- Barre de recherche -->
+    <!-- Barre de recherche -->
     <div class="mt-8 w-full max-w-4xl bg-white rounded-lg shadow-lg p-4 flex flex-wrap gap-4 md:flex-nowrap animate-fade-in-up delay-300">
-      <!-- Champ de recherche -->
-      <input
-        type="text"
-        placeholder="Search destinations"
-        class="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-      />
-      <!-- Date d'arrivée -->
-      <input
-        type="date"
-        placeholder="Check in"
-        class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-      />
-      <!-- Date de départ -->
-      <input
-        type="date"
-        placeholder="Check out"
-        class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-      />
-      <!-- Sélection du nombre de voyageurs -->
-      <select
-        class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-      >
-        <option>Add guests</option>
-        <option>1 Guest</option>
-        <option>2 Guests</option>
-        <option>3+ Guests</option>
-      </select>
-      <!-- Bouton de recherche -->
-      <button
-        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg flex items-center justify-center transition-all duration-300 transform hover:scale-105"
-      >
-        🔍 Search
-      </button>
-    </div>
-  </div>
+      <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="flex flex-wrap gap-4 md:flex-nowrap w-full">
+        <!-- Champ de recherche pour la localisation -->
+        <input
+          type="text"
+          placeholder="Adresse ou ville"
+          formControlName="localisation"
+          class="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+        />
+
+        <!-- Sélection du type d'animal -->
+        <select
+          formControlName="typeAnimauxIds"
+          class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+        >
+          <option [value]="null">Type d'animal</option>
+          <option *ngFor="let type of typeAnimaux" [value]="type.id">{{ type.nom }}</option>
+        </select>
+
+        <!-- Tarif maximum par jour -->
+        <input
+          type="number"
+          placeholder="Tarif max par jour"
+          formControlName="tarifMaxParJour"
+          class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+        />
+
+        <!-- Bouton de recherche -->
+        <button
+          type="submit"
+          class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg flex items-center justify-center transition-all duration-300 transform hover:scale-105"
+        >
+          🔍 Rechercher
+        </button>
+      </form>    </div>    </div>
+
 </div>
 
 <!-- Styles pour les animations -->

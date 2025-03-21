@@ -25,7 +25,6 @@ export const routes: Routes = [
   { path: 'nav', component: NavbarComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'heros', component: HerosComponent },
 
   {
     path: 'dashboard-admin',
@@ -41,6 +40,7 @@ export const routes: Routes = [
     component: LayoutComponent,
     canActivate: [AuthGuard], // Appliquer le guard pour vérifier la connexion
     children: [
+
       { path: 'home', component: HomeComponent },
       { path: 'heb', component: HebergementComponent },
       { path: 'detail-hebergement/:id', component: DetailHebergementComponent },
