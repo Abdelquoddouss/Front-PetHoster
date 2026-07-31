@@ -8,7 +8,7 @@ import {HebergeurSearchRequest} from "../interface/hebergeur-search-request";
   providedIn: 'root'
 })
 export class HebergeurService {
-  private apiUrl = 'http://localhost:8081/api/hebergeurs';
+  private apiUrl = 'http://localhost:8084/api/hebergeurs';
 
   constructor(private http: HttpClient) {}
 

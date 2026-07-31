@@ -7,7 +7,7 @@
           <!-- Première photo (grande) -->
           <div class="h-[460px] rounded-xl shadow-lg overflow-hidden bg-gray-200 dark:bg-gray-700">
             <img class="w-full h-full object-cover transform hover:scale-105 transition duration-500"
-                 [src]="'http://localhost:8081' + hebergement.photosHebergement[0]"
+                 [src]="'http://localhost:8084' + hebergement.photosHebergement[0]"
                  alt="Photo de l'hébergement"
                  (error)="onImageError($event, hebergement)">
           </div>
@@ -17,7 +17,7 @@
             <div *ngFor="let photo of hebergement.photosHebergement.slice(1); let i = index"
                  class="h-48 rounded-xl shadow-lg overflow-hidden bg-gray-200 dark:bg-gray-700">
               <img class="w-full h-full object-cover transform hover:scale-105 transition duration-500"
-                   [src]="'http://localhost:8081' + photo"
+                   [src]="'http://localhost:8084' + photo"
                    alt="Photo de l'hébergement"
                    (error)="onImageError($event, hebergement)">
             </div>

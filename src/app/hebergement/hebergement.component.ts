@@ -25,6 +25,7 @@ export class HebergementComponent implements OnInit {
   hebergements: HebergeurResponse[] = [];
   isAuthenticated: boolean = false;
   searchParams: HebergeurSearchRequest | null = null;
+  isLoading: boolean = true;
 
   currentPage: number = 1;
   itemsPerPage: number = 3;
@@ -61,6 +62,7 @@ export class HebergementComponent implements OnInit {
   }
 
   loadSearchResults(searchRequest: HebergeurSearchRequest | null): void {
+    this.isLoading = true;
     console.log('Search request being sent:', JSON.stringify(searchRequest)); // Add this line
 
     this.hebergeurService.searchHebergements(searchRequest).subscribe(
@@ -77,8 +79,10 @@ export class HebergementComponent implements OnInit {
         this.totalItems = this.hebergements.length;
         this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
         this.currentPage = 1;
+        this.isLoading = false;
       },
       (error) => {
+        this.isLoading = false;
         console.error('Erreur lors de la recherche des hébergements', error);
         this.loadHebergements();
       }
@@ -86,6 +90,7 @@ export class HebergementComponent implements OnInit {
   }
 
   loadHebergements(): void {
+    this.isLoading = true;
     this.hebergeurService.getAllHebergements().subscribe(
       (data: HebergeurResponse[]) => {
         // Filtrer les hébergements pour ne garder que ceux qui ont les propriétés requises
@@ -100,8 +105,10 @@ export class HebergementComponent implements OnInit {
         // Mettre à jour les variables de pagination
         this.totalItems = this.hebergements.length;
         this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
+        this.isLoading = false;
       },
       (error) => {
+        this.isLoading = false;
         console.error('Erreur lors de la récupération des hébergements', error);
       }
     );
@@ -132,6 +139,24 @@ export class HebergementComponent implements OnInit {
 
   get pages(): number[] {
     return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
+  get isHost(): boolean {
+    return this.userRole === 'HEBERGEUR';
+  }
+
+  photoUrl(hebergement: HebergeurResponse): string {
+    return hebergement.photosHebergement?.length
+      ? 'http://localhost:8084' + hebergement.photosHebergement[0]
+      : 'assets/img/animaux hostel.jpg';
+  }
+
+  onImageError(event: Event): void {
+    (event.target as HTMLImageElement).src = 'assets/img/animaux hostel.jpg';
+  }
+
+  detailLink(id: string): (string | number)[] {
+    return ['/detail-hebergement', id];
   }
 
   checkUserRole(): void {

@@ -7,7 +7,7 @@ import {TypeAnimal} from "../interface/type-animal";
   providedIn: 'root'
 })
 export class TypaAnimalService {
-  private apiUrl = 'http://localhost:8081/api/type-animals';
+  private apiUrl = 'http://localhost:8084/api/type-animals';
 
   constructor(private http: HttpClient) { }
 

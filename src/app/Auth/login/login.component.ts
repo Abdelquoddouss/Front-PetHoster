@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AuthService} from "../../services/auth.service";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {CommonModule} from "@angular/common";
 import {jwtDecode} from "jwt-decode";
 import Swal from "sweetalert2";
@@ -10,7 +10,7 @@ import Swal from "sweetalert2";
   selector: 'app-login',
   standalone: true,
   imports: [ReactiveFormsModule,
-  CommonModule],
+  CommonModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })

@@ -1,56 +1,11 @@
-<section class="min-h-screen flex items-center justify-center px-6 py-12 relative overflow-hidden">
-  <!-- Image de fond optimisée -->
-  <picture>
-    <source srcset="/assets/img/istockphoto-1417882544-612x612.jpg" type="image/webp">
-    <source srcset="/assets/img/istockphoto-1417882544-612x612.jpg" type="image/jpeg">
-    <img src="/assets/img/istockphoto-1417882544-612x612.jpg" alt="Groupe d'animaux de compagnie" class="absolute inset-0 w-full h-full object-cover">
-  </picture>
-
-  <!-- Overlay sombre pour améliorer la lisibilité -->
-  <div class="bg-black/60 absolute inset-0"></div>
-
-  <!-- Conteneur du formulaire -->
-  <div class="relative z-10 max-w-md w-full bg-white backdrop-blur-md shadow-2xl rounded-lg p-8 transform transition-all hover:shadow-3xl hover:-translate-y-2">
-    <h2 class="text-3xl font-bold text-gray-800 text-center mb-4">Connexion</h2>
-    <p class="text-gray-600 text-center mb-8">Connectez-vous pour accéder à votre compte.</p>
-
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <!-- Email -->
-      <div class="mb-6">
-        <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
-        <input type="email" id="email" formControlName="email" required
-               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition placeholder-gray-400"
-               placeholder="exemple@mail.com">
-        <!-- Messages de validation pour l'email -->
-        <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="text-red-500 text-sm mt-1">
-          <div *ngIf="loginForm.get('email')?.errors?.['required']">L'email est obligatoire.</div>
-          <div *ngIf="loginForm.get('email')?.errors?.['email']">Veuillez entrer un email valide.</div>
-        </div>
-      </div>
-
-      <!-- Mot de passe -->
-      <div class="mb-6">
-        <label for="password" class="block text-gray-700 font-medium mb-2">Mot de passe</label>
-        <input type="password" id="password" formControlName="password" required minlength="8"
-               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition placeholder-gray-400"
-               placeholder="••••••••">
-        <!-- Messages de validation pour le mot de passe -->
-        <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-red-500 text-sm mt-1">
-          <div *ngIf="loginForm.get('password')?.errors?.['required']">Le mot de passe est obligatoire.</div>
-          <div *ngIf="loginForm.get('password')?.errors?.['minlength']">Le mot de passe doit contenir au moins 8 caractères.</div>
-        </div>
-      </div>
-
-      <!-- Bouton de connexion -->
-      <button type="submit"
-              class="w-full bg-gradient-to-r from-blue-300 to-blue-200 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:from-blue-400 hover:to-blue-300 transition transform hover:scale-105 active:scale-95">
-        Se connecter
-      </button>
-    </form>
-
-    <!-- Lien vers l'inscription -->
-    <p class="text-center text-gray-600 mt-6">
-      Pas encore inscrit ? <a href="/register" class="text-blue-600 hover:underline">Inscrivez-vous ici</a>
-    </p>
-  </div>
-</section>
+<main class="auth-page">
+  <a routerLink="/home" class="auth-brand"><span>PH</span>Pet<strong>Hoster</strong></a>
+  <section class="auth-visual"><img src="assets/img/auth-pets-v2.png" alt="Une famille heureuse avec ses animaux"><div class="visual-shade"></div><div class="visual-copy"><span class="visual-kicker">BIENVENUE CHEZ PET HOSTER</span><h1>Heureux de vous<br><em>retrouver.</em></h1><p>Reprenez la ou vous vous etiez arrete et retrouvez les meilleurs hebergeurs pour votre compagnon.</p><div class="visual-trust"><span>4,9</span><div><strong>Une communaute de confiance</strong><small>Des animaux heureux, des maitres sereins.</small></div></div></div></section>
+  <section class="auth-form-side"><div class="auth-card"><div class="auth-heading"><span class="auth-kicker">VOTRE ESPACE</span><h2>Connectez-vous</h2><p>Renseignez vos identifiants pour acceder a votre compte.</p></div>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+      <div class="form-field" [class.has-error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"><label for="email">Adresse email</label><div class="input-wrap"><span class="field-icon">E</span><input type="email" id="email" formControlName="email" autocomplete="email" placeholder="vous@exemple.com"></div><div class="field-error" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"><span *ngIf="loginForm.get('email')?.errors?.['required']">L'email est obligatoire.</span><span *ngIf="loginForm.get('email')?.errors?.['email']">Entrez une adresse email valide.</span></div></div>
+      <div class="form-field" [class.has-error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"><div class="label-row"><label for="password">Mot de passe</label><a href="#">Mot de passe oublie ?</a></div><div class="input-wrap"><span class="field-icon">*</span><input type="password" id="password" formControlName="password" autocomplete="current-password" placeholder="8 caracteres minimum"></div><div class="field-error" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"><span *ngIf="loginForm.get('password')?.errors?.['required']">Le mot de passe est obligatoire.</span><span *ngIf="loginForm.get('password')?.errors?.['minlength']">8 caracteres minimum.</span></div></div>
+      <button type="submit" class="auth-submit" [disabled]="loginForm.invalid">Se connecter <span>+</span></button>
+    </form><div class="auth-divider"><span>Premiere visite ?</span></div><p class="auth-switch">Pas encore de compte ? <a routerLink="/register">Creer un compte</a></p><p class="auth-note"><span>V</span> Vos donnees sont protegees et securisees.</p>
+  </div></section>
+</main>
