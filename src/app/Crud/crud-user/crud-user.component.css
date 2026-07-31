@@ -1,0 +1,10 @@
+/* Ajoutez des styles personnalisés si nécessaire */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px 15px;
+  text-align: left;
+}

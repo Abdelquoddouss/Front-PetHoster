@@ -1,0 +1,7 @@
+<nav class="site-nav">
+<div class="nav-inner">
+<a routerLink="/home" class="brand"><span class="brand-mark">PH</span><span>Pet<span>Hoster</span></span></a>
+<div class="nav-links"><a routerLink="/home">Accueil</a><a routerLink="/heb">Hebergements</a><a routerLink="/reservation-prprietaire">Mes reservations</a></div>
+<div class="nav-actions"><a *ngIf="!isLoggedIn()" routerLink="/login">Connexion</a><a *ngIf="!isLoggedIn()" routerLink="/register" class="btn-primary btn-small">Creer un compte</a><button *ngIf="isLoggedIn()" (click)="logout()" class="btn-ghost btn-small">Deconnexion</button></div>
+</div>
+</nav>
