@@ -1,66 +1,19 @@
-<div class="flex">
+﻿<div class="admin-shell">
+<button class="mobile-menu" (click)="toggleSidebar()" aria-label="Menu"><span></span><span></span><span></span></button><div class="overlay" [class.visible]="sidebarOpen" (click)="toggleSidebar()"></div>
+<aside class="sidebar" [class.open]="sidebarOpen">
+<a routerLink="/dashboard-admin" class="brand"><img src="assets/img/Orange_Simple_Pet_Shop_Logo-removebg-preview.png" alt="Logo PetHoster"><span>Pet<b>Hoster</b><small>ADMINISTRATION</small></span></a>
+<label>ESPACE DE GESTION</label><nav>
+<a routerLink="/dashboard-admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"><i>▦</i>Aperçu</a>
+<a routerLink="/dashboard-admin/crud-user" routerLinkActive="active"><i>♟</i>Utilisateurs <small>GÉRER</small></a>
+<a routerLink="/dashboard-admin/crud-typeanimal" routerLinkActive="active"><i>◆</i>Types d’animaux <small>GÉRER</small></a>
+</nav><div class="sidebar-foot"><a routerLink="/home" class="public">↗ &nbsp; Voir le site public</a><div class="profile"><span>A</span><div><b>Administrateur</b><small>Compte sécurisé</small></div><button class="logout-button" (click)="confirmLogout()" title="Se déconnecter"><span>↪</span> Se déconnecter</button></div></div>
+</aside>
+<main>
+<section *ngIf="isOverview" class="overview"><header><div><label>TABLEAU DE BORD</label><h1>Bonjour, <em>Administrateur</em></h1><p>{{currentDate | titlecase}} · Voici l’essentiel de votre plateforme.</p></div><a routerLink="/home">Voir le site ↗</a></header>
+<div class="hero"><div><label>CENTRE DE CONTRÔLE</label><h2>Gardez PetHoster<br>accueillant et bien organisé.</h2><p>Gérez votre communauté et les catégories d’animaux depuis un espace simple, clair et cohérent.</p></div><span>PH</span></div>
+<div class="stats"><article><i>👥</i><div><label>UTILISATEURS INSCRITS</label><strong>{{userCount===null?'—':userCount}}</strong><small>Communauté PetHoster</small></div><a routerLink="crud-user">→</a></article><article><i>🐾</i><div><label>TYPES D’ANIMAUX</label><strong>{{animalTypeCount===null?'—':animalTypeCount}}</strong><small>Catégories disponibles</small></div><a routerLink="crud-typeanimal">→</a></article><article><i>✓</i><div><label>ÉTAT DE LA PLATEFORME</label><strong class="online">Opérationnelle</strong><small><b class="dot"></b> Services disponibles</small></div></article></div>
+<div class="bottom-grid"><section class="actions"><label>ACTIONS RAPIDES</label><h2>Que souhaitez-vous gérer ?</h2><a routerLink="crud-user"><em>01</em><div><b>Gérer les utilisateurs</b><small>Consulter les comptes et modérer la communauté.</small></div><span>→</span></a><a routerLink="crud-typeanimal"><em>02</em><div><b>Organiser les types d’animaux</b><small>Ajouter ou retirer les catégories proposées.</small></div><span>→</span></a><a routerLink="/home"><em>03</em><div><b>Parcourir l’expérience publique</b><small>Vérifier le parcours visible par vos utilisateurs.</small></div><span>↗</span></a></section><aside class="tip"><i>✦</i><label>CONSEIL DU JOUR</label><h3>Une plateforme de confiance commence par une communauté bien accompagnée.</h3><p>Consultez régulièrement les nouveaux comptes et gardez vos catégories à jour.</p><a routerLink="crud-user">Voir les utilisateurs →</a></aside></div>
+</section><section class="child" [class.visible]="!isOverview"><router-outlet></router-outlet></section>
+</main></div>
 
-  <aside class="flex flex-col w-64 h-screen px-4 py-8 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700">
-    <a href="index.html" class="text-xl font-bold flex items-center space-x-2 group">
-      <span class="text-3xl transition-transform duration-300 group-hover:rotate-12">🐾</span>
-      <span class="bg-gradient-to-r from-green-300 to-blue-300 bg-clip-text text-transparent transition-all duration-300 group-hover:from-green-400 group-hover:to-blue-400 drop-shadow-lg">Pet Hoster</span>
-    </a>
 
-    <div class="relative mt-6">
-        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-            <svg class="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="none">
-                <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-        </span>
-
-      <input type="text" class="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" placeholder="Search" />
-    </div>
-
-    <div class="flex flex-col justify-between flex-1 mt-6">
-      <nav>
-        <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-300 transform rounded-md dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700" routerLink="/dashboard-admin/crud-user">
-          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Icône pour les utilisateurs -->
-            <path d="M12 4.35418C12.7329 3.52375 13.8053 3 15 3C17.2091 3 19 4.79086 19 7C19 9.20914 17.2091 11 15 11C13.8053 11 12.7329 10.4762 12 9.64582C11.2671 10.4762 10.1947 11 9 11C6.79086 11 5 9.20914 5 7C5 4.79086 6.79086 3 9 3C10.1947 3 11.2671 3.52375 12 4.35418Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-          <span class="mx-4 font-medium">Gestion des utilisateurs</span>
-        </a>
-
-        <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-300 transform rounded-md dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700" routerLink="/dashboard-admin/crud-typeanimal">
-          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Icône pour les utilisateurs -->
-            <path d="M12 4.35418C12.7329 3.52375 13.8053 3 15 3C17.2091 3 19 4.79086 19 7C19 9.20914 17.2091 11 15 11C13.8053 11 12.7329 10.4762 12 9.64582C11.2671 10.4762 10.1947 11 9 11C6.79086 11 5 9.20914 5 7C5 4.79086 6.79086 3 9 3C10.1947 3 11.2671 3.52375 12 4.35418Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-          <span class="mx-4 font-medium">Type Animal</span>
-        </a>
-
-        <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-300 transform rounded-md dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"  routerLink="/home">
-          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Icône pour les utilisateurs -->
-            <path d="M12 4.35418C12.7329 3.52375 13.8053 3 15 3C17.2091 3 19 4.79086 19 7C19 9.20914 17.2091 11 15 11C13.8053 11 12.7329 10.4762 12 9.64582C11.2671 10.4762 10.1947 11 9 11C6.79086 11 5 9.20914 5 7C5 4.79086 6.79086 3 9 3C10.1947 3 11.2671 3.52375 12 4.35418Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-          <span class="mx-4 font-medium"> HOME</span>
-        </a>
-
-        <!-- Bouton Logout -->
-        <button (click)="logout()" class="flex items-center w-full px-4 py-2 mt-5 text-gray-700 rounded-lg cursor-pointer hover:bg-gradient-to-r from-green-300 to-blue-300 hover:text-white transition-all duration-200">
-          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M15 3H19C20.1046 3 21 3.89543 21 5V19C21 20.1046 20.1046 21 19 21H15M10 17L15 12M15 12L10 7M15 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-          <span class="mx-4 font-medium">Logout</span>
-        </button>
-      </nav>
-
-      <a href="#" class="flex items-center px-4 -mx-2">
-        <img class="object-cover mx-2 rounded-full h-9 w-9" src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="avatar" />
-        <span class="mx-2 font-medium text-gray-800 dark:text-gray-200">John Doe</span>
-      </a>
-    </div>
-  </aside>
-  <div class="flex-1 p-4">
-    <router-outlet></router-outlet>
-  </div>
-</div>

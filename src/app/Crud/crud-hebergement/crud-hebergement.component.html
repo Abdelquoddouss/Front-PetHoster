@@ -1,85 +1,11 @@
-<div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 py-12">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div *ngIf="hebergement; else noHebergement" class="flex flex-col md:flex-row -mx-4">
-      <!-- Section des images -->
-      <div class="md:flex-1 px-4">
-        <div *ngIf="hebergement.photosHebergement.length > 0; else noImage" class="space-y-6">
-          <!-- Première photo (grande) -->
-          <div class="h-[460px] rounded-xl shadow-lg overflow-hidden bg-gray-200 dark:bg-gray-700">
-            <img class="w-full h-full object-cover transform hover:scale-105 transition duration-500"
-                 [src]="'http://localhost:8084' + hebergement.photosHebergement[0]"
-                 alt="Photo de l'hébergement"
-                 (error)="onImageError($event, hebergement)">
-          </div>
+﻿<section class="property-page"><header class="page-heading"><div><span>MON ESPACE · HÉBERGEMENT</span><h1>Mon <em>annonce</em></h1><p>Visualisez et gérez la présentation de votre service.</p></div><a routerLink="/dashboard-hebergeur/form-herbergement"><i>✎</i> Modifier l’annonce</a></header>
+<div *ngIf="loading" class="feedback"><div class="loader"></div><h2>Chargement de votre annonce</h2><p>Nous préparons vos informations…</p></div>
+<div *ngIf="!loading && (error || !hasCompleteHebergement)" class="feedback empty"><span>⌂</span><small>VOTRE ESPACE EST PRÊT</small><h2>Créez votre première annonce</h2><p>Présentez votre hébergement, votre tarif et les animaux que vous accueillez.</p><a routerLink="/dashboard-hebergeur/form-herbergement">Créer mon hébergement <b>→</b></a></div>
+<article *ngIf="hebergement && hasCompleteHebergement && !loading" class="property">
+<section class="cover"><img *ngIf="hebergement.photosHebergement.length" [src]="'http://localhost:8084'+hebergement.photosHebergement[0]" (error)="onImageError($event,hebergement)" alt="Photo principale"><div *ngIf="!hebergement.photosHebergement.length" class="cover-empty"><span>🐾</span><p>Ajoutez une belle photo de couverture</p></div><div class="shade"></div><div class="cover-top"><span class="live"><i></i> Annonce en ligne</span><span class="photos">▧ {{hebergement.photosHebergement.length}} photo{{hebergement.photosHebergement.length>1?'s':''}}</span></div><div class="cover-copy"><span>HÉBERGEMENT PET FRIENDLY</span><h2>Chez {{hebergement.prenom}}</h2><p>⌖ {{hebergement.adresse||'Adresse à compléter'}}</p></div><div class="cover-price"><small>À PARTIR DE</small><b>{{hebergement.tarifParJour|number:'1.0-2'}} <span>DH</span></b><em>par jour</em></div></section>
+<section class="thumb-strip" *ngIf="hebergement.photosHebergement.length>1"><figure *ngFor="let photo of hebergement.photosHebergement.slice(1,4);let i=index"><img [src]="'http://localhost:8084'+photo" (error)="onImageError($event,hebergement)" [alt]="'Photo '+(i+2)"><figcaption>Photo {{i+2}}</figcaption></figure><a routerLink="/dashboard-hebergeur/form-herbergement"><span>＋</span><b>Gérer les photos</b></a></section>
+<div class="content-grid"><main><section class="about block"><div class="section-head"><span>01</span><div><small>À PROPOS</small><h3>Votre service d’hébergement</h3></div></div><p>{{hebergement.descriptionService||'Ajoutez une description pour expliquer votre accueil et rassurer les propriétaires.'}}</p></section><section class="accepted block"><div class="section-head"><span>02</span><div><small>VOS PENSIONNAIRES</small><h3>Animaux acceptés</h3></div></div><div class="pet-list"><span *ngFor="let type of hebergement.typeAnimauxAcceptesNoms"><i>🐾</i><b>{{type}}</b><small>Accepté</small></span><p *ngIf="!hebergement.typeAnimauxAcceptesNoms.length">Aucun type d’animal sélectionné.</p></div></section></main>
+<aside><section class="host-card"><div class="host-top"><span>{{hebergement.prenom.charAt(0)}}{{hebergement.nom.charAt(0)}}</span><div><small>VOTRE PROFIL HÉBERGEUR</small><h3>{{hebergement.prenom}} {{hebergement.nom}}</h3><p><i></i> Profil actif</p></div></div><div class="host-detail"><span>✉</span><div><small>Adresse e-mail</small><b>{{hebergement.email}}</b></div></div><div class="host-detail"><span>☎</span><div><small>Téléphone</small><b>{{hebergement.telephone||'À compléter'}}</b></div></div><div class="host-detail"><span>⌖</span><div><small>Localisation</small><b>{{hebergement.adresse||'À compléter'}}</b></div></div></section><section class="quality"><span>✦</span><div><small>QUALITÉ DE L’ANNONCE</small><h3>{{hebergement.photosHebergement.length>=3&&hebergement.descriptionService?'Très bonne':'À améliorer'}}</h3></div><p>Des informations précises et trois belles photos augmentent vos chances de réservation.</p></section></aside></div>
+<footer class="manage"><div><small>GESTION DE L’ANNONCE</small><p>Besoin de mettre vos informations à jour ?</p></div><div><a routerLink="/dashboard-hebergeur/form-herbergement">✎ Modifier</a><button (click)="onDelete(hebergement.id)">⌫ Réinitialiser l’annonce</button></div></footer>
+</article></section>
 
-          <!-- Galerie des autres photos -->
-          <div *ngIf="hebergement.photosHebergement.length > 1" class="grid grid-cols-2 gap-4">
-            <div *ngFor="let photo of hebergement.photosHebergement.slice(1); let i = index"
-                 class="h-48 rounded-xl shadow-lg overflow-hidden bg-gray-200 dark:bg-gray-700">
-              <img class="w-full h-full object-cover transform hover:scale-105 transition duration-500"
-                   [src]="'http://localhost:8084' + photo"
-                   alt="Photo de l'hébergement"
-                   (error)="onImageError($event, hebergement)">
-            </div>
-          </div>
-        </div>
-        <ng-template #noImage>
-          <div class="h-[460px] rounded-xl shadow-lg bg-gray-200 dark:bg-gray-700 mb-6 flex items-center justify-center">
-            <span class="text-gray-500 dark:text-gray-400 text-lg">Aucune image disponible</span>
-          </div>
-        </ng-template>
-      </div>
-
-      <!-- Section des informations -->
-      <div class="md:flex-1 px-4">
-        <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-4">{{ hebergement.nom }} {{ hebergement.prenom }}</h2>
-        <p class="text-gray-600 dark:text-gray-400 text-lg mb-6">
-          {{ hebergement.descriptionService }}
-        </p>
-
-        <!-- Tarif par jour -->
-        <div class="mb-6 p-6 bg-white dark:bg-gray-700 rounded-xl shadow-lg">
-          <span class="font-bold text-gray-700 dark:text-gray-300 text-lg">Tarif par jour:</span>
-          <span class="text-blue-600 dark:text-blue-400 text-xl font-semibold ml-2">{{ hebergement.tarifParJour }} €</span>
-        </div>
-
-        <!-- Types d'animaux acceptés -->
-        <div class="mb-6 p-6 bg-white dark:bg-gray-700 rounded-xl shadow-lg">
-          <span class="font-bold text-gray-700 dark:text-gray-300 text-lg">Types d'animaux acceptés:</span>
-          <ul class="list-disc list-inside mt-3">
-            <li *ngFor="let type of hebergement.typeAnimauxAcceptesNoms"
-                class="text-gray-600 dark:text-gray-400 text-lg">
-              {{ type }}
-            </li>
-          </ul>
-        </div>
-
-        <!-- Description supplémentaire (optionnelle) -->
-        <div class="p-6 bg-white dark:bg-gray-700 rounded-xl shadow-lg">
-          <span class="font-bold text-gray-700 dark:text-gray-300 text-lg">Description:</span>
-          <p class="text-gray-600 dark:text-gray-400 text-lg mt-3">
-            {{ hebergement.descriptionService }}
-          </p>
-        </div>
-
-        <!-- Boutons pour modifier et supprimer -->
-        <div class="flex justify-end space-x-4 mt-8">
-          <button (click)="onDelete(hebergement.id)"
-                  class="bg-red-500 text-white py-3 px-6 rounded-xl font-semibold hover:bg-red-600 transition duration-300 flex items-center">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-            </svg>
-            Supprimer
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Message si aucun hébergement n'est disponible -->
-    <ng-template #noHebergement>
-      <div class="w-full h-64 flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded-xl shadow-lg">
-        <span class="text-gray-500 dark:text-gray-400 text-xl">Aucun hébergement enregistré</span>
-      </div>
-    </ng-template>
-  </div>
-</div>
