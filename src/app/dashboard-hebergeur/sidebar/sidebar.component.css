@@ -5,3 +5,31 @@
 
 /* Déconnexion explicite */
 .foot>div{flex-wrap:wrap}.foot .logout-button{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;padding:10px 12px;border:1px solid rgba(242,160,131,.3);border-radius:10px;background:rgba(231,124,88,.1);color:#f3b096;font-size:11px;font-weight:700;cursor:pointer;transition:.2s}.foot .logout-button:hover{background:#e77c58;color:white;border-color:#e77c58}.foot .logout-button span{font-size:16px}
+
+.foot .logout-button svg{width:17px;height:17px;fill:currentColor;flex:0 0 auto}
+
+
+
+/* Wordmark PetHoster v4 */
+.brand,.admin-brand{height:75px;overflow:hidden;justify-content:center}.brand img,.admin-brand img{width:210px!important;height:105px!important;max-width:none;object-fit:cover!important;object-position:center!important;background:#f8f5ee!important;border-radius:12px!important;padding:0!important}.brand>span,.admin-brand>span{display:none!important}
+
+/* Logo vectoriel transparent */
+.brand,.admin-brand{height:66px!important;overflow:visible!important;justify-content:flex-start!important}.brand img,.admin-brand img{display:block;width:205px!important;height:55px!important;object-fit:contain!important;object-position:left center!important;background:transparent!important;border-radius:0!important;padding:0!important}
+
+/* Nouveau visuel de la carte de bienvenue */
+.welcome{padding-right:32px}.welcome-visual{position:relative;align-self:stretch;width:min(38%,430px);min-width:310px;margin:-43px -32px -43px 30px;overflow:hidden;border-radius:110px 24px 24px 110px}.welcome-visual:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(36,92,77,.42),transparent 45%,rgba(12,45,37,.08))}.welcome-visual>img{width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .6s}.welcome:hover .welcome-visual>img{transform:scale(1.035)}.visual-badge{position:absolute;z-index:2;right:18px;bottom:18px;display:flex;align-items:center;gap:9px;padding:10px 13px;border-radius:13px;background:rgba(255,255,255,.94);box-shadow:0 10px 30px rgba(8,38,30,.2);color:#173f35}.visual-badge>span{width:31px;height:31px;display:grid;place-items:center;border-radius:9px;background:#fbe5dd;color:#e77c58}.visual-badge p{display:flex;flex-direction:column;margin:0}.visual-badge b{font-size:10px}.visual-badge small{font-size:8px;color:#71827c}@media(max-width:1050px){.welcome-visual{width:36%;min-width:270px}}@media(max-width:760px){.welcome{min-height:630px;align-items:flex-start;flex-direction:column;padding:31px 25px 0;overflow:hidden}.welcome>div:first-child{position:relative;z-index:2}.welcome-visual{width:calc(100% + 50px);height:285px;min-width:0;flex:0 0 auto;align-self:auto;margin:28px -25px 0;border-radius:95px 95px 0 0}.visual-badge{right:14px;bottom:14px}}@media(max-width:430px){.welcome{min-height:650px}.welcome-visual{height:260px}.visual-badge b{font-size:9px}}
+
+/* Cadrage du visuel dédié aux hébergeurs */
+.welcome-visual>img{object-position:center 52%}@media(min-width:761px){.welcome-visual>img{object-position:center 48%}}@media(max-width:760px){.welcome-visual>img{object-position:center 58%}}
+
+/* Cadrage du visuel hébergeur multi-animaux */
+.welcome-visual>img{object-position:center 60%}@media(min-width:761px){.welcome-visual>img{object-position:center 56%}}@media(max-width:760px){.welcome-visual>img{object-position:center 63%}}
+
+/* Visuel signature de l’espace hébergeur */
+.welcome-visual>img{object-position:center center!important}.welcome-visual:after{background:linear-gradient(90deg,rgba(23,63,53,.34),transparent 42%,rgba(12,45,37,.06))}@media(max-width:760px){.welcome-visual>img{object-position:center 52%!important}}
+
+/* Visuel final : hébergement moderne */
+.welcome-visual>img{object-position:center center!important}.welcome-visual:after{background:linear-gradient(90deg,rgba(23,63,53,.3),transparent 44%,rgba(12,45,37,.04))}.visual-badge>span{font-size:0}.visual-badge>span:before{content:'⌂';font-size:16px}.visual-badge b{font-size:0}.visual-badge b:after{content:'Un espace pensé pour eux';font-size:10px}.visual-badge small{font-size:0}.visual-badge small:after{content:'Moderne, calme et sécurisé';font-size:8px}
+
+/* Véritable hébergement moderne pour animaux */
+.welcome-visual>img{object-position:center center!important}.visual-badge b:after{content:'Un véritable espace animalier'}.visual-badge small:after{content:'Jeux, repos et jardin sécurisé'}

@@ -1,5 +1,5 @@
-<main class="auth-page">
-  <a routerLink="/home" class="auth-brand"><span>PH</span>Pet<strong>Hoster</strong></a>
+﻿<main class="auth-page">
+  <a routerLink="/home" class="auth-brand" aria-label="Retour accueil"><img src="assets/img/pet-hoster-wordmark-v5-light.svg" alt="PetHoster"></a>
   <section class="auth-visual"><img src="assets/img/auth-pets-v2.png" alt="Une famille heureuse avec ses animaux"><div class="visual-shade"></div><div class="visual-copy"><span class="visual-kicker">BIENVENUE CHEZ PET HOSTER</span><h1>Heureux de vous<br><em>retrouver.</em></h1><p>Reprenez la ou vous vous etiez arrete et retrouvez les meilleurs hebergeurs pour votre compagnon.</p><div class="visual-trust"><span>4,9</span><div><strong>Une communaute de confiance</strong><small>Des animaux heureux, des maitres sereins.</small></div></div></div></section>
   <section class="auth-form-side"><div class="auth-card"><div class="auth-heading"><span class="auth-kicker">VOTRE ESPACE</span><h2>Connectez-vous</h2><p>Renseignez vos identifiants pour acceder a votre compte.</p></div>
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
@@ -9,3 +9,4 @@
     </form><div class="auth-divider"><span>Premiere visite ?</span></div><p class="auth-switch">Pas encore de compte ? <a routerLink="/register">Creer un compte</a></p><p class="auth-note"><span>V</span> Vos donnees sont protegees et securisees.</p>
   </div></section>
 </main>
+

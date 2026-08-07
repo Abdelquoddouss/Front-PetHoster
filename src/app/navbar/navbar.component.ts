@@ -1,33 +1,3 @@
-import { Component } from '@angular/core';
-import {Router, RouterLink} from "@angular/router";
-import {AuthService} from "../services/auth.service";
-import {CommonModule} from "@angular/common";
-
-@Component({
-  selector: 'app-navbar',
-  standalone: true,
-  imports: [
-    RouterLink,
-    CommonModule
-  ],
-  templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.css'
-})
-export class NavbarComponent {
-  test = false;
-  menuOpen = false;
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {
-  }
-
-  isLoggedIn(): boolean {
-    return this.authService.isLoggedIn();
-  }
-
-  logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/login']);
-  }
-}
+﻿import {CommonModule} from '@angular/common';import {Component,HostListener} from '@angular/core';import {Router,RouterLink,RouterLinkActive} from '@angular/router';import {AuthService} from '../services/auth.service';import Swal from 'sweetalert2';
+@Component({selector:'app-navbar',standalone:true,imports:[RouterLink,RouterLinkActive,CommonModule],templateUrl:'./navbar.component.html',styleUrl:'./navbar.component.css'})
+export class NavbarComponent{menuOpen=false;scrolled=false;constructor(private auth:AuthService,private router:Router){}@HostListener('window:scroll')onScroll(){this.scrolled=window.scrollY>45}@HostListener('document:keydown.escape')closeOnEscape(){this.menuOpen=false}isLoggedIn(){return this.auth.isLoggedIn()}dashboardLink(){return this.auth.getCurrentUserRole()==='ADMIN'?'/dashboard-admin':'/dashboard-hebergeur'}toggleMenu(){this.menuOpen=!this.menuOpen}closeMenu(){this.menuOpen=false}confirmLogout(){this.menuOpen=false;Swal.fire({title:'Se déconnecter ?',text:'Vous devrez vous identifier pour accéder à nouveau à votre compte.',icon:'question',showCancelButton:true,buttonsStyling:false,customClass:{container:'ph-logout-container',popup:'ph-logout-popup',icon:'ph-logout-icon',title:'ph-logout-title',htmlContainer:'ph-logout-text',actions:'ph-logout-actions',confirmButton:'ph-logout-confirm',cancelButton:'ph-logout-cancel'},confirmButtonText:'Oui, me déconnecter',cancelButtonText:'Rester connecté',reverseButtons:true}).then(r=>{if(r.isConfirmed){this.auth.logout();this.router.navigate(['/login'])}})}}
