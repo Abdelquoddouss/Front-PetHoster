@@ -1,12 +1,12 @@
 ﻿<div class="admin-shell">
 <button class="mobile-menu" (click)="toggleSidebar()" aria-label="Menu"><span></span><span></span><span></span></button><div class="overlay" [class.visible]="sidebarOpen" (click)="toggleSidebar()"></div>
 <aside class="sidebar" [class.open]="sidebarOpen">
-<a routerLink="/dashboard-admin" class="brand"><img src="assets/img/Orange_Simple_Pet_Shop_Logo-removebg-preview.png" alt="Logo PetHoster"><span>Pet<b>Hoster</b><small>ADMINISTRATION</small></span></a>
+<a routerLink="/dashboard-admin" class="brand"><img src="assets/img/pet-hoster-wordmark-v5-light.svg" alt="Logo PetHoster"><span>Pet<b>Hoster</b><small>ADMINISTRATION</small></span></a>
 <label>ESPACE DE GESTION</label><nav>
 <a routerLink="/dashboard-admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"><i>▦</i>Aperçu</a>
 <a routerLink="/dashboard-admin/crud-user" routerLinkActive="active"><i>♟</i>Utilisateurs <small>GÉRER</small></a>
 <a routerLink="/dashboard-admin/crud-typeanimal" routerLinkActive="active"><i>◆</i>Types d’animaux <small>GÉRER</small></a>
-</nav><div class="sidebar-foot"><a routerLink="/home" class="public">↗ &nbsp; Voir le site public</a><div class="profile"><span>A</span><div><b>Administrateur</b><small>Compte sécurisé</small></div><button class="logout-button" (click)="confirmLogout()" title="Se déconnecter"><span>↪</span> Se déconnecter</button></div></div>
+</nav><div class="sidebar-foot"><a routerLink="/home" class="public">↗ &nbsp; Voir le site public</a><div class="profile"><span>A</span><div><b>Administrateur</b><small>Compte sécurisé</small></div><button class="logout-button" (click)="confirmLogout()" title="Se déconnecter"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5v3H3v4h7v3zm9-14h-7a2 2 0 0 0-2 2v2h2V5h7v14h-7v-2h-2v2a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z"/></svg><span>Se déconnecter</span></button></div></div>
 </aside>
 <main>
 <section *ngIf="isOverview" class="overview"><header><div><label>TABLEAU DE BORD</label><h1>Bonjour, <em>Administrateur</em></h1><p>{{currentDate | titlecase}} · Voici l’essentiel de votre plateforme.</p></div><a routerLink="/home">Voir le site ↗</a></header>
@@ -15,5 +15,10 @@
 <div class="bottom-grid"><section class="actions"><label>ACTIONS RAPIDES</label><h2>Que souhaitez-vous gérer ?</h2><a routerLink="crud-user"><em>01</em><div><b>Gérer les utilisateurs</b><small>Consulter les comptes et modérer la communauté.</small></div><span>→</span></a><a routerLink="crud-typeanimal"><em>02</em><div><b>Organiser les types d’animaux</b><small>Ajouter ou retirer les catégories proposées.</small></div><span>→</span></a><a routerLink="/home"><em>03</em><div><b>Parcourir l’expérience publique</b><small>Vérifier le parcours visible par vos utilisateurs.</small></div><span>↗</span></a></section><aside class="tip"><i>✦</i><label>CONSEIL DU JOUR</label><h3>Une plateforme de confiance commence par une communauté bien accompagnée.</h3><p>Consultez régulièrement les nouveaux comptes et gardez vos catégories à jour.</p><a routerLink="crud-user">Voir les utilisateurs →</a></aside></div>
 </section><section class="child" [class.visible]="!isOverview"><router-outlet></router-outlet></section>
 </main></div>
+
+
+
+
+
 
 

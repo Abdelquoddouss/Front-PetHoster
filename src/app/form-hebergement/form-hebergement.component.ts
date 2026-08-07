@@ -1,150 +1,16 @@
-﻿import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { HebergeurService } from '../services/hebergeur.service';
-import { HebergeurResponse } from '../interface/hebergeur-response';
-import Swal from 'sweetalert2';
-import { NgForOf, NgIf } from "@angular/common";
-import { TypaAnimalService } from '../services/typa-animal.service';
-import { TypeAnimal } from '../interface/type-animal';
-
-@Component({
-  selector: 'app-form-hebergement',
-  templateUrl: './form-hebergement.component.html',
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    NgForOf,
-    NgIf
-  ],
-  styleUrls: ['./form-hebergement.component.css']
-})
-export class FormHebergementComponent implements OnInit {
-  hebergementForm: FormGroup = new FormGroup({});
-  selectedFiles: (File | null)[] = [null, null, null];
-  photoPreviews: (string | null)[] = [null, null, null];
-  isSubmitting = false;
-
-  // Dynamic animal types fetched from the backend
-  typeAnimauxOptions: TypeAnimal[] = [];
-
-  selectedAnimalTypes: string[] = [];
-
-  constructor(
-    private fb: FormBuilder,
-    private hebergeurService: HebergeurService,
-    private typeAnimalService: TypaAnimalService,
-    private router: Router
-  ) {
-    this.initForm();
-  }
-
-  ngOnInit(): void {
-    // Fetch animal types from the backend
-    this.loadAnimalTypes();
-  }
-
-  initForm(): void {
-    this.hebergementForm = this.fb.group({
-      tarifParJour: ['', [Validators.required, Validators.min(0)]],
-      descriptionService: ['', Validators.required]
-    });
-  }
-
-  // Fetch animal types from the backend
-  loadAnimalTypes(): void {
-    this.typeAnimalService.getAllTypeAnimals().subscribe({
-      next: (data: TypeAnimal[]) => {
-        this.typeAnimauxOptions = data; // Populate the array with data from the backend
-      },
-      error: (err) => {
-        console.error('Erreur lors du chargement des types d\'animaux:', err);
-        Swal.fire({
-          title: 'Erreur',
-          text: 'Impossible de charger les types d\'animaux. Veuillez rÃ©essayer plus tard.',
-          icon: 'error',
-          confirmButtonColor: '#173f35'
-        });
-      }
-    });
-  }
-
-  onFileSelected(event: any, index: number): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.selectedFiles[index] = file;
-      const reader = new FileReader();
-      reader.onload = () => this.photoPreviews[index] = reader.result as string;
-      reader.readAsDataURL(file);
-    } else {
-      this.selectedFiles[index] = null;
-      this.photoPreviews[index] = null;
-    }
-  }
-
-  onAnimalTypeChange(event: any): void {
-    const animalId = event.target.value;
-    const isChecked = event.target.checked;
-
-    if (isChecked) {
-      if (!this.selectedAnimalTypes.includes(animalId)) {
-        this.selectedAnimalTypes.push(animalId);
-      }
-    } else {
-      this.selectedAnimalTypes = this.selectedAnimalTypes.filter(id => id !== animalId);
-    }
-  }
-
-  onSubmit(): void {
-    if (this.hebergementForm.invalid) {
-      Swal.fire('Erreur de validation', 'Veuillez remplir tous les champs obligatoires.', 'error');
-      return;
-    }
-
-    const filesSelected = this.selectedFiles.filter(file => file !== null).length;
-    if (filesSelected !== 3) {
-      Swal.fire('Erreur de validation', 'Veuillez tÃ©lÃ©charger exactement 3 photos de votre hÃ©bergement.', 'error');
-      return;
-    }
-
-    if (this.selectedAnimalTypes.length === 0) {
-      Swal.fire('Erreur de validation', 'Veuillez sÃ©lectionner au moins un type d\'animal acceptÃ©.', 'error');
-      return;
-    }
-
-    this.isSubmitting = true;
-
-    const formData = new FormData();
-    formData.append('tarifParJour', this.hebergementForm.value.tarifParJour);
-    formData.append('descriptionService', this.hebergementForm.value.descriptionService);
-    formData.append('typeAnimauxAcceptesIds', JSON.stringify(this.selectedAnimalTypes));
-    this.selectedFiles.forEach((file, index) => {
-      if (file) {
-        formData.append('photosHebergement', file, file.name);
-      }
-    });
-
-    this.hebergeurService.createHebergeur(formData).subscribe({
-      next: (response: HebergeurResponse) => {
-        console.log('HÃ©bergeur crÃ©Ã© avec succÃ¨s:', response);
-        Swal.fire({
-          title: 'SuccÃ¨s!',
-          text: 'Votre service d\'hÃ©bergement a Ã©tÃ© enregistrÃ© avec succÃ¨s',
-          icon: 'success',
-          timer: 3000,
-          timerProgressBar: true,
-          showConfirmButton: false
-        });
-        setTimeout(() => {
-          this.router.navigate(['/dashboard-hebergeur/crud-herbergement']);
-        }, 3000);
-      },
-      error: (error) => {
-        console.error('Erreur lors de la crÃ©ation de l\'hÃ©bergeur:', error);
-        Swal.fire('Erreur', 'Ã‰chec de l\'enregistrement de votre hÃ©bergement: ' + (error.error?.message || error.message || 'Erreur inconnue'), 'error');
-        this.isSubmitting = false;
-      },
-    });
-  }
+﻿import {Component,OnInit} from '@angular/core';import {FormBuilder,FormGroup,ReactiveFormsModule,Validators} from '@angular/forms';import {Router} from '@angular/router';import {CommonModule} from '@angular/common';import {HebergeurService} from '../services/hebergeur.service';import {HebergeurResponse} from '../interface/hebergeur-response';import {TypaAnimalService} from '../services/typa-animal.service';import {TypeAnimal} from '../interface/type-animal';import Swal from 'sweetalert2';
+@Component({selector:'app-form-hebergement',templateUrl:'./form-hebergement.component.html',standalone:true,imports:[ReactiveFormsModule,CommonModule],styleUrls:['./form-hebergement.component.css']})
+export class FormHebergementComponent implements OnInit{
+ hebergementForm:FormGroup;selectedFiles:(File|null)[]=[null,null,null];photoPreviews:(string|null)[]=[null,null,null];existingPhotos:(string|null)[]=[null,null,null];typeAnimauxOptions:TypeAnimal[]=[];selectedAnimalTypes:string[]=[];existingHebergement:HebergeurResponse|null=null;isSubmitting=false;loadingExisting=true;
+ constructor(private fb:FormBuilder,private hosts:HebergeurService,private types:TypaAnimalService,private router:Router){this.hebergementForm=this.fb.group({tarifParJour:['',[Validators.required,Validators.min(0.01)]],descriptionService:['',Validators.required]})}
+ ngOnInit(){this.loadAnimalTypes();this.loadExistingHebergement()}
+ get isEditMode(){return !!this.existingHebergement}
+ get photoCount(){return [0,1,2].filter(i=>this.selectedFiles[i]||this.existingPhotos[i]).length}
+ loadAnimalTypes(){this.types.getAllTypeAnimals().subscribe({next:data=>{this.typeAnimauxOptions=data;this.syncSelectedAnimals()},error:()=>Swal.fire({title:'Catégories indisponibles',text:'Impossible de charger les types d’animaux.',icon:'error',confirmButtonColor:'#173f35'})})}
+ loadExistingHebergement(){const userId=localStorage.getItem('userId');if(!userId){this.loadingExisting=false;return}this.hosts.getHebergeurByUserId(userId).subscribe({next:data=>{const hasData=Number(data.tarifParJour)>0||!!data.descriptionService?.trim()||(data.photosHebergement?.length||0)>0||(data.typeAnimauxAcceptesIds?.length||0)>0||(data.typeAnimauxAcceptesNoms?.length||0)>0;if(hasData){this.existingHebergement={...data,photosHebergement:data.photosHebergement||[],typeAnimauxAcceptesIds:data.typeAnimauxAcceptesIds||[],typeAnimauxAcceptesNoms:data.typeAnimauxAcceptesNoms||[]};this.hebergementForm.patchValue({tarifParJour:data.tarifParJour,descriptionService:data.descriptionService});this.selectedAnimalTypes=[...(data.typeAnimauxAcceptesIds||[])];(data.photosHebergement||[]).slice(0,3).forEach((photo,i)=>{this.existingPhotos[i]=photo;this.photoPreviews[i]='http://localhost:8084'+photo});this.syncSelectedAnimals()}this.loadingExisting=false},error:()=>this.loadingExisting=false})}
+ syncSelectedAnimals(){if(!this.existingHebergement||this.selectedAnimalTypes.length||!this.typeAnimauxOptions.length)return;const names=this.existingHebergement.typeAnimauxAcceptesNoms||[];this.selectedAnimalTypes=this.typeAnimauxOptions.filter(t=>names.includes(t.animalType)).map(t=>t.id)}
+ onFileSelected(event:Event,index:number){const input=event.target as HTMLInputElement,file=input.files?.[0]||null;this.selectedFiles[index]=file;if(file){const reader=new FileReader();reader.onload=()=>this.photoPreviews[index]=reader.result as string;reader.readAsDataURL(file)}else{this.photoPreviews[index]=this.existingPhotos[index]?'http://localhost:8084'+this.existingPhotos[index]:null}}
+ onAnimalTypeChange(event:Event){const input=event.target as HTMLInputElement;this.selectedAnimalTypes=input.checked?[...new Set([...this.selectedAnimalTypes,input.value])]:this.selectedAnimalTypes.filter(id=>id!==input.value)}
+ onSubmit(){this.hebergementForm.markAllAsTouched();if(this.hebergementForm.invalid)return this.validation('Complétez le tarif et la description.');if(this.photoCount<3)return this.validation('Ajoutez trois photos de votre hébergement.');if(!this.selectedAnimalTypes.length)return this.validation('Sélectionnez au moins un type d’animal.');this.isSubmitting=true;const fd=new FormData();fd.append('tarifParJour',this.hebergementForm.value.tarifParJour);fd.append('descriptionService',this.hebergementForm.value.descriptionService);fd.append('typeAnimauxAcceptesIds',JSON.stringify(this.selectedAnimalTypes));this.selectedFiles.forEach(file=>{if(file)fd.append('photosHebergement',file,file.name)});const request=this.existingHebergement?this.hosts.updateHebergeur(this.existingHebergement.id,fd):this.hosts.createHebergeur(fd);request.subscribe({next:()=>{this.isSubmitting=false;Swal.fire({title:this.isEditMode?'Annonce mise à jour':'Hébergement créé',text:'Vos informations sont maintenant enregistrées.',icon:'success',confirmButtonColor:'#173f35'}).then(()=>this.router.navigate(['/dashboard-hebergeur/crud-herbergement']))},error:e=>{this.isSubmitting=false;Swal.fire({title:'Enregistrement impossible',text:e.error?.message||'Veuillez réessayer.',icon:'error',confirmButtonColor:'#173f35'})}})}
+ private validation(text:string){Swal.fire({title:'Informations incomplètes',text,icon:'warning',confirmButtonColor:'#e77c58'})}
 }
-

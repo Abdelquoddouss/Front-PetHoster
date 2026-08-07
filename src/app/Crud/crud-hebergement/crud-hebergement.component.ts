@@ -18,19 +18,20 @@ import Swal from "sweetalert2";
 })
 export class CrudHebergementComponent implements OnInit {
   hebergement: HebergeurResponse | null = null;
+  currentPhotoIndex = 0;
+  private touchStartX = 0;
   loading: boolean = false;
   error: string | null = null;
   isAuthenticated: boolean = false;
 
   get hasCompleteHebergement(): boolean {
     const h = this.hebergement;
-    return !!h
-      && Number(h.tarifParJour) > 0
-      && !!h.descriptionService?.trim()
-      && Array.isArray(h.typeAnimauxAcceptesNoms)
-      && h.typeAnimauxAcceptesNoms.length > 0
-      && Array.isArray(h.photosHebergement)
-      && h.photosHebergement.length === 3;
+    if (!h) return false;
+    return Number(h.tarifParJour) > 0
+      || !!h.descriptionService?.trim()
+      || h.photosHebergement.length > 0
+      || h.typeAnimauxAcceptesNoms.length > 0
+      || h.typeAnimauxAcceptesIds.length > 0;
   }
   constructor(
     private hebergeurService: HebergeurService,
@@ -70,7 +71,7 @@ export class CrudHebergementComponent implements OnInit {
     this.hebergeurService.getHebergeurByUserId(userId).subscribe({
       next: (data: HebergeurResponse) => {
         console.log('Hebergement data received:', data);
-        this.hebergement = data;
+        this.hebergement = { ...data, photosHebergement: data.photosHebergement || [], typeAnimauxAcceptesNoms: data.typeAnimauxAcceptesNoms || [], typeAnimauxAcceptesIds: data.typeAnimauxAcceptesIds || [] };
         this.loading = false;
       },
       error: (err) => {
@@ -82,7 +83,7 @@ export class CrudHebergementComponent implements OnInit {
           localStorage.removeItem('authToken');
           this.router.navigate(['/login']);
         } else if (err.status === 404) {
-          this.error = 'Aucun hÃ©bergement trouvÃ© pour cet utilisateur';
+          this.error = 'Vous n’avez pas encore créé votre hébergement';
         } else {
           this.error = 'Une erreur est survenue lors du chargement des donnÃ©es';
         }
@@ -128,6 +129,33 @@ export class CrudHebergementComponent implements OnInit {
     });
   }
 
+  selectPhoto(index: number): void {
+    const total = this.hebergement?.photosHebergement.length || 0;
+    if (total) this.currentPhotoIndex = Math.max(0, Math.min(index, total - 1));
+  }
+
+  previousPhoto(): void {
+    const total = this.hebergement?.photosHebergement.length || 0;
+    if (total) this.currentPhotoIndex = (this.currentPhotoIndex - 1 + total) % total;
+  }
+
+  nextPhoto(): void {
+    const total = this.hebergement?.photosHebergement.length || 0;
+    if (total) this.currentPhotoIndex = (this.currentPhotoIndex + 1) % total;
+  }
+
+  onTouchStart(event: TouchEvent): void {
+    this.touchStartX = event.touches[0]?.clientX || 0;
+  }
+
+  onTouchEnd(event: TouchEvent): void {
+    const endX = event.changedTouches[0]?.clientX || 0;
+    const distance = endX - this.touchStartX;
+    if (Math.abs(distance) > 45) distance < 0 ? this.nextPhoto() : this.previousPhoto();
+  }
 }
+
+
+
 
 

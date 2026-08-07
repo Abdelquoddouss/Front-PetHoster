@@ -1,5 +1,5 @@
-<main class="auth-page register-page">
-<a routerLink="/home" class="auth-brand"><span>PH</span>Pet<strong>Hoster</strong></a>
+﻿<main class="auth-page register-page">
+<a routerLink="/home" class="auth-brand" aria-label="Retour accueil"><img src="assets/img/pet-hoster-wordmark-v5-light.svg" alt="PetHoster"></a>
 <section class="auth-visual"><img src="assets/img/auth-pets-v2.png" alt="Une famille heureuse avec ses animaux"><div class="visual-shade"></div><div class="visual-copy"><span class="visual-kicker">REJOIGNEZ LA COMMUNAUTE</span><h1>Une belle aventure<br><em>commence ici.</em></h1><p>Creez votre espace et trouvez un accueil chaleureux pour chaque sejour de votre compagnon.</p><div class="benefit-list"><span><b>V</b> Recherche personnalisee</span><span><b>V</b> Hebergeurs passionnes</span><span><b>V</b> Reservations simplifiees</span></div></div></section>
 <section class="auth-form-side"><div class="auth-card register-card"><div class="auth-heading"><span class="auth-kicker">CREER VOTRE ESPACE</span><h2>Bienvenue parmi nous</h2><p>Quelques informations suffisent pour rejoindre Pet Hoster.</p></div>
 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate><div class="form-grid">
@@ -11,3 +11,4 @@
 <div class="form-field"><label for="adresse">Adresse</label><div class="input-wrap"><span class="field-icon">O</span><input id="adresse" type="text" formControlName="adresse" autocomplete="street-address" placeholder="Ville et adresse"></div><div class="field-error" *ngIf="registerForm.get('adresse')?.invalid && registerForm.get('adresse')?.touched">L'adresse est obligatoire.</div></div>
 </div><label class="terms"><input type="checkbox" required><span>J'accepte les conditions d'utilisation et la politique de confidentialite.</span></label><button type="submit" class="auth-submit" [disabled]="registerForm.invalid">Creer mon compte <span>+</span></button></form><p class="auth-switch">Vous avez deja un compte ? <a routerLink="/login">Se connecter</a></p></div></section>
 </main>
+
