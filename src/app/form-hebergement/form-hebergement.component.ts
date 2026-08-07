@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HebergeurService } from '../services/hebergeur.service';
@@ -21,7 +21,8 @@ import { TypeAnimal } from '../interface/type-animal';
 })
 export class FormHebergementComponent implements OnInit {
   hebergementForm: FormGroup = new FormGroup({});
-  selectedFiles: (File | null)[] = [null, null, null]; // Array to hold up to 3 files
+  selectedFiles: (File | null)[] = [null, null, null];
+  photoPreviews: (string | null)[] = [null, null, null];
   isSubmitting = false;
 
   // Dynamic animal types fetched from the backend
@@ -60,9 +61,9 @@ export class FormHebergementComponent implements OnInit {
         console.error('Erreur lors du chargement des types d\'animaux:', err);
         Swal.fire({
           title: 'Erreur',
-          text: 'Impossible de charger les types d\'animaux. Veuillez réessayer plus tard.',
+          text: 'Impossible de charger les types d\'animaux. Veuillez rÃ©essayer plus tard.',
           icon: 'error',
-          confirmButtonColor: '#c1121f'
+          confirmButtonColor: '#173f35'
         });
       }
     });
@@ -72,8 +73,12 @@ export class FormHebergementComponent implements OnInit {
     const file = event.target.files[0];
     if (file) {
       this.selectedFiles[index] = file;
+      const reader = new FileReader();
+      reader.onload = () => this.photoPreviews[index] = reader.result as string;
+      reader.readAsDataURL(file);
     } else {
       this.selectedFiles[index] = null;
+      this.photoPreviews[index] = null;
     }
   }
 
@@ -98,12 +103,12 @@ export class FormHebergementComponent implements OnInit {
 
     const filesSelected = this.selectedFiles.filter(file => file !== null).length;
     if (filesSelected !== 3) {
-      Swal.fire('Erreur de validation', 'Veuillez télécharger exactement 3 photos de votre hébergement.', 'error');
+      Swal.fire('Erreur de validation', 'Veuillez tÃ©lÃ©charger exactement 3 photos de votre hÃ©bergement.', 'error');
       return;
     }
 
     if (this.selectedAnimalTypes.length === 0) {
-      Swal.fire('Erreur de validation', 'Veuillez sélectionner au moins un type d\'animal accepté.', 'error');
+      Swal.fire('Erreur de validation', 'Veuillez sÃ©lectionner au moins un type d\'animal acceptÃ©.', 'error');
       return;
     }
 
@@ -121,24 +126,25 @@ export class FormHebergementComponent implements OnInit {
 
     this.hebergeurService.createHebergeur(formData).subscribe({
       next: (response: HebergeurResponse) => {
-        console.log('Hébergeur créé avec succès:', response);
+        console.log('HÃ©bergeur crÃ©Ã© avec succÃ¨s:', response);
         Swal.fire({
-          title: 'Succès!',
-          text: 'Votre service d\'hébergement a été enregistré avec succès',
+          title: 'SuccÃ¨s!',
+          text: 'Votre service d\'hÃ©bergement a Ã©tÃ© enregistrÃ© avec succÃ¨s',
           icon: 'success',
           timer: 3000,
           timerProgressBar: true,
           showConfirmButton: false
         });
         setTimeout(() => {
-          this.router.navigate(['/dashboard-hebergeur']);
+          this.router.navigate(['/dashboard-hebergeur/crud-herbergement']);
         }, 3000);
       },
       error: (error) => {
-        console.error('Erreur lors de la création de l\'hébergeur:', error);
-        Swal.fire('Erreur', 'Échec de l\'enregistrement de votre hébergement: ' + (error.error?.message || error.message || 'Erreur inconnue'), 'error');
+        console.error('Erreur lors de la crÃ©ation de l\'hÃ©bergeur:', error);
+        Swal.fire('Erreur', 'Ã‰chec de l\'enregistrement de votre hÃ©bergement: ' + (error.error?.message || error.message || 'Erreur inconnue'), 'error');
         this.isSubmitting = false;
       },
     });
   }
 }
+

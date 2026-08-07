@@ -1,24 +1,6 @@
-import { Component } from '@angular/core';
-import {Router, RouterLink, RouterOutlet} from "@angular/router";
-import {AuthService} from "../../services/auth.service";
+﻿import {CommonModule} from '@angular/common';import {Component,OnDestroy,OnInit} from '@angular/core';import {NavigationEnd,Router,RouterLink,RouterLinkActive,RouterOutlet} from '@angular/router';import {filter,Subscription} from 'rxjs';import {AuthService} from '../../services/auth.service';import {HebergeurService} from '../../services/hebergeur.service';import {ReservationService} from '../../services/reservation.service';import Swal from 'sweetalert2';
+@Component({selector:'app-sidebar',standalone:true,imports:[CommonModule,RouterLink,RouterLinkActive,RouterOutlet],templateUrl:'./sidebar.component.html',styleUrl:'./sidebar.component.css'})
+export class SidebarComponent implements OnInit,OnDestroy{menuOpen=false;isOverview=true;listingReady=false;reservationCount:number|null=null;pendingCount:number|null=null;private sub?:Subscription;constructor(private auth:AuthService,private hosts:HebergeurService,private reservations:ReservationService,private router:Router){}ngOnInit(){this.setView(this.router.url);this.sub=this.router.events.pipe(filter(e=>e instanceof NavigationEnd)).subscribe(e=>{this.setView((e as NavigationEnd).urlAfterRedirects);this.menuOpen=false});const id=localStorage.getItem('userId');if(id){this.hosts.getHebergeurByUserId(id).subscribe({next:h=>this.listingReady=!!h&&Number(h.tarifParJour)>0&&!!h.descriptionService?.trim()&&h.typeAnimauxAcceptesNoms?.length>0&&h.photosHebergement?.length===3,error:()=>this.listingReady=false});this.reservations.getReservationsByHebergeur(id).subscribe({next:(r:any[])=>{this.reservationCount=r.length;this.pendingCount=r.filter(x=>x.statut==='EN_ATTENTE').length},error:()=>{this.reservationCount=null;this.pendingCount=null}})}}ngOnDestroy(){this.sub?.unsubscribe()}toggleMenu(){this.menuOpen=!this.menuOpen}confirmLogout(){Swal.fire({title:'Se déconnecter ?',text:'Vous devrez vous identifier pour accéder à nouveau à votre espace hébergeur.',icon:'question',showCancelButton:true,buttonsStyling:false,customClass:{container:'ph-logout-container',popup:'ph-logout-popup',icon:'ph-logout-icon',title:'ph-logout-title',htmlContainer:'ph-logout-text',actions:'ph-logout-actions',confirmButton:'ph-logout-confirm',cancelButton:'ph-logout-cancel'},confirmButtonText:'Oui, me déconnecter',cancelButtonText:'Rester connecté',reverseButtons:true}).then(r=>{if(r.isConfirmed)this.logout()})}logout(){this.auth.logout();this.router.navigate(['/login'])}private setView(url:string){this.isOverview=url.split('?')[0].replace(/\/$/,'')==='/dashboard-hebergeur'}}
 
-@Component({
-  selector: 'app-sidebar',
-  standalone: true,
-  imports: [
-    RouterLink,
-    RouterOutlet
 
-  ],
-  templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.css'
-})
-export class SidebarComponent {
-  constructor(private authService: AuthService, private router: Router) {}
 
-  // Méthode pour gérer la déconnexion
-  logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/login']);
-  }
-}
